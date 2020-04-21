@@ -1,0 +1,2 @@
+rootProject.name='powerControl'
+include ':app'
