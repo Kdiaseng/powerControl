@@ -9,15 +9,19 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.aplicativo.powercontrol.adapter.MonthAdapter
 import kotlinx.android.synthetic.main.fragment_home.*
 
 /**
  * A simple [Fragment] subclass.
  */
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
     companion object{
-        val YEARS = listOf( "2018", "2019", "2020")
+        val YEARS = listOf( "2018", "2019","2020")
+        val MONTH = listOf("JAN", "FER","MAR", "ABR","MAI")
     }
 
     override fun onCreateView(
@@ -38,8 +42,19 @@ class HomeFragment : Fragment() {
             autoCompleteTextView_year.showDropDown()
             return@setOnTouchListener false
         }
+
+        loadMonthInRecyclerView(recyclerView_months)
     }
 
+    private fun loadMonthInRecyclerView(recycle: RecyclerView?){
+        recycle!!.adapter = MonthAdapter(MONTH,this)
+        val layoutManger = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
+        recycle.layoutManager = layoutManger
+    }
+
+    override fun onClickMonth(month: String) {
+      Toast.makeText(requireContext(),month, Toast.LENGTH_SHORT).show()
+    }
 
 
 }
