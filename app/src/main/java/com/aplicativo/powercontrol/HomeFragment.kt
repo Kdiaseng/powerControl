@@ -12,8 +12,14 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.aplicativo.powercontrol.adapter.MonthAdapter
+import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.utils.ColorTemplate
 import kotlinx.android.synthetic.main.card_data.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import java.util.ArrayList
 
 /**
  * A simple [Fragment] subclass.
@@ -45,6 +51,35 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         }
 
         loadMonthInRecyclerView(recyclerView_months)
+        ploteChart(barChart)
+
+    }
+
+    private fun ploteChart(barChart: BarChart?) {
+       val entries = ArrayList<BarEntry>()
+        entries.add(BarEntry(8f,0))
+        entries.add(BarEntry(2f,1))
+        entries.add(BarEntry(5f,2))
+        entries.add(BarEntry(20f,3))
+        entries.add(BarEntry(15f,4))
+        entries.add(BarEntry(19f,5))
+        entries.add(BarEntry(20f,6))
+        entries.add(BarEntry(55f,7))
+        entries.add(BarEntry(54f,8))
+        entries.add(BarEntry(32f,9))
+        entries.add(BarEntry(24f,10))
+        entries.add(BarEntry(18f,11))
+
+
+
+        val barDataSet = BarDataSet(entries, "Cells")
+
+        val labels = arrayListOf("2016", "2015", "2014", "2013","2012", "2011", "2010","2009","2008","2007","2006","2005")
+        val data = BarData(labels, barDataSet)
+        barChart!!.data = data
+        barChart.setDescription("Set Bar Chart Description Here")
+        barDataSet.setColors(ColorTemplate.COLORFUL_COLORS)
+        barChart.animateY(5000)
 
     }
 
