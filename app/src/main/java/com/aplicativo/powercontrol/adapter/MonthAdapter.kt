@@ -15,7 +15,10 @@ class MonthAdapter(val months: List<String>, var itemClickListener: OnMonthListe
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bindView(month: String, action: OnMonthListener){
             itemView.textView_month.text = month
-            action.onClickMonth(month)
+            itemView.setOnClickListener {
+                action.onClickMonth(month)
+            }
+
         }
     }
 

@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.aplicativo.powercontrol.adapter.MonthAdapter
+import kotlinx.android.synthetic.main.card_data.*
 import kotlinx.android.synthetic.main.fragment_home.*
 
 /**
@@ -21,7 +22,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
     companion object{
         val YEARS = listOf( "2018", "2019","2020")
-        val MONTH = listOf("JAN", "FER","MAR", "ABR","MAI")
+        val MONTH = listOf("JAN", "FER","MAR", "ABR","MAI","JUN")
     }
 
     override fun onCreateView(
@@ -44,6 +45,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         }
 
         loadMonthInRecyclerView(recyclerView_months)
+
     }
 
     private fun loadMonthInRecyclerView(recycle: RecyclerView?){

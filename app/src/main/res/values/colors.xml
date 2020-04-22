@@ -12,4 +12,17 @@
     <color name="colorGrayLight">#92a3b2</color>
     <color name="colorOrange">#f79413</color>
 
+    <!-- palette color dark to blue   -->
+    <color name="paletteBlack">#212121</color>
+    <color name="paletteBlackLight">#323232</color>
+    <color name="paletteBlueDark">#0d7377</color>
+    <color name="paletteBlueLight">#14ffec</color>
+
+    <!-- palette color dark to White  -->
+    <color name="palette1Black">#222831</color>
+    <color name="palette1BlackLight">#393e46</color>
+    <color name="palette1BlueDark">#00adb5</color>
+    <color name="palette1White">#eeeeee</color>
+
+
 </resources>
