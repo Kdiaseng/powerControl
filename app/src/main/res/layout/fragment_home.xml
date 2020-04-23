@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/palette1Black"
+    android:background="@color/paletteBlack"
     tools:context=".HomeFragment">
 
     <androidx.cardview.widget.CardView
@@ -14,7 +14,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        app:cardBackgroundColor="@color/colorAccent"
+        app:cardBackgroundColor="@color/colorBlackLight"
         app:cardCornerRadius="5dp"
         app:cardElevation="10dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +40,7 @@
                     android:layout_marginTop="24dp"
                     android:fontFamily="sans-serif-condensed-medium"
                     android:text="@string/seja_bem_vindo"
-                    android:textColor="@color/colorBlackToGray"
+                    android:textColor="@color/colorGreenAccent"
                     android:textSize="24sp" />
 
                 <TextView
@@ -50,7 +50,7 @@
                     android:layout_marginStart="24dp"
                     android:fontFamily="@font/advent_pro_semibold"
                     android:text="@string/power_control"
-                    android:textColor="@color/colorGrayDark"
+                    android:textColor="@color/palette1White"
                     android:textSize="18sp" />
 
             </LinearLayout>
@@ -63,7 +63,10 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:hint="@string/ano"
-                android:textColor="@color/colorBlackToGray"
+                app:startIconTint="@color/colorGreenAccent"
+                app:hintTextColor= "@color/colorGreenAccent"
+                app:boxStrokeColor="@color/colorGreenAccent"
+                android:textColorHint="@color/colorGreenAccent"
                 app:endIconMode="dropdown_menu"
                 app:errorEnabled="true">
 
@@ -72,7 +75,7 @@
                     style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorBlackToGray" />
+                    android:textColor="@color/colorGreenAccent" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
@@ -81,14 +84,13 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-
         android:id="@+id/cardView2"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        app:cardBackgroundColor="@color/colorBlackLight"
+        app:cardBackgroundColor="@color/paletteBlack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView">
@@ -96,6 +98,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
             android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -161,6 +164,7 @@
         app:layout_constraintTop_toTopOf="@+id/textView" />
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
@@ -176,76 +180,65 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView3"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="322dp"
-                android:layout_gravity="center"
-                android:paddingBottom="5dp"
-                app:cardBackgroundColor="@color/colorBlackLight"
-                app:cardCornerRadius="5dp">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:gravity="end"
+                    android:orientation="horizontal"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="15dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:orientation="horizontal"
-                        android:paddingStart="5dp"
-                        android:paddingEnd="15dp">
+                        android:layout_marginEnd="5dp"
+                        android:text="@string/valor_total"
+                        android:textColor="#E0F7FA"
+                        android:textSize="12sp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="5dp"
-                            android:text="@string/valor_total"
-                            android:textColor="#E0F7FA"
-                            android:textSize="12sp" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="5dp"
-                            android:text="R$"
-                            android:textColor="#E0F7FA"
-                            android:textSize="14sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:text="R$"
+                        android:textColor="#E0F7FA"
+                        android:textSize="14sp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/alfa_slab_one"
-                            android:text="221.0"
-                            android:layout_marginEnd="5dp"
-                            android:textColor="#E0F7FA"
-                            android:textSize="18sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:fontFamily="@font/alfa_slab_one"
+                        android:text="221.0"
+                        android:textColor="#E0F7FA"
+                        android:textSize="18sp" />
 
-                        <ImageView
-                            android:id="@+id/imageView_icon_validation"
-                            android:layout_gravity="center"
-                            android:src="@drawable/checkyes"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"/>
-                    </LinearLayout>
-
-
-                    <include
-                        android:id="@+id/card_data_energy"
-                        layout="@layout/card_data"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                    <ImageView
+                        android:id="@+id/imageView_icon_validation"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/checkyes" />
                 </LinearLayout>
 
 
-            </androidx.cardview.widget.CardView>
-
+                <include
+                    android:id="@+id/card_data_energy"
+                    layout="@layout/card_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -269,6 +262,7 @@
 
                     </androidx.cardview.widget.CardView>
 
+
                     <androidx.cardview.widget.CardView
                         android:layout_width="400dp"
                         android:layout_height="match_parent">
@@ -282,16 +276,32 @@
 
                 </LinearLayout>
 
-
             </HorizontalScrollView>
 
         </LinearLayout>
 
     </ScrollView>
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottom_app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="41dp"
+            android:layout_gravity="bottom"
+            app:backgroundTint="@color/paletteBlack"
+            app:fabAlignmentMode="end" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            app:backgroundTint="@color/colorGreenAccent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_input_add"
+            app:layout_anchor="@id/bottom_app_bar" />
 
-
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
