@@ -10,7 +10,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="0dp"
-        android:layout_height="115dp"
+        android:layout_height="100dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
@@ -27,6 +27,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:layout_gravity="center"
                 android:layout_width="202dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -70,7 +71,7 @@
                     android:id="@+id/autoCompleteTextView_year"
                     style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
                     android:layout_width="match_parent"
-                    android:layout_height="59dp"
+                    android:layout_height="wrap_content"
                     android:textColor="@color/colorBlackToGray" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -80,9 +81,10 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
+
         android:id="@+id/cardView2"
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
@@ -99,7 +101,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView_months"
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="horizontal"
                 tools:listitem="@layout/item_month" />
@@ -113,32 +115,56 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:fontFamily="@font/autour_one"
         android:text="@string/consumption_period"
         android:textColor="#F1F8E9"
-        android:textSize="12sp"
+        android:textSize="10sp"
         app:layout_constraintEnd_toStartOf="@+id/textView_consumption_period_value"
         app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/autour_one"
+        android:text="@string/preposition"
+        android:textColor="#F1F8E9"
+        android:textSize="12sp"
+        app:layout_constraintTop_toTopOf="@+id/textView_consumption_period_value"
+        app:layout_constraintEnd_toStartOf="@+id/textView_consumption_period_value_end"
+        tools:layout_editor_absoluteY="182dp" />
 
     <TextView
         android:id="@+id/textView_consumption_period_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         android:fontFamily="@font/autour_one"
         android:text="@string/consumption_period_value"
         android:textColor="#F1F8E9"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@+id/textView"
         app:layout_constraintTop_toTopOf="@+id/textView_consumption_period" />
+
+    <TextView
+        android:id="@+id/textView_consumption_period_value_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/autour_one"
+        android:text="@string/consumption_period_value"
+        android:textColor="#F1F8E9"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView" />
 
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -151,22 +177,74 @@
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
-                android:layout_gravity="center"
-                app:cardCornerRadius="5dp"
                 android:id="@+id/cardView3"
                 android:layout_width="match_parent"
-                android:layout_height="295dp"
-                app:cardBackgroundColor="@color/colorBlackLight">
+                android:layout_height="322dp"
+                android:layout_gravity="center"
+                android:paddingBottom="5dp"
+                app:cardBackgroundColor="@color/colorBlackLight"
+                app:cardCornerRadius="5dp">
 
-                <include
-                     android:id="@+id/card_data_energy"
-                    layout="@layout/card_data" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:orientation="horizontal"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="15dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:text="@string/valor_total"
+                            android:textColor="#E0F7FA"
+                            android:textSize="12sp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:text="R$"
+                            android:textColor="#E0F7FA"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/alfa_slab_one"
+                            android:text="221.0"
+                            android:layout_marginEnd="5dp"
+                            android:textColor="#E0F7FA"
+                            android:textSize="18sp" />
+
+                        <ImageView
+                            android:id="@+id/imageView_icon_validation"
+                            android:layout_gravity="center"
+                            android:src="@drawable/checkyes"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"/>
+                    </LinearLayout>
+
+
+                    <include
+                        android:id="@+id/card_data_energy"
+                        layout="@layout/card_data"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
 
             </androidx.cardview.widget.CardView>
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp">
 
                 <LinearLayout
@@ -175,11 +253,11 @@
                     android:orientation="horizontal">
 
                     <androidx.cardview.widget.CardView
-                        app:cardBackgroundColor="@color/colorBlackLight"
-                        app:cardCornerRadius="5dp"
                         android:layout_width="325dp"
                         android:layout_height="307dp"
-                        android:layout_marginEnd="10dp">
+                        android:layout_marginEnd="10dp"
+                        app:cardBackgroundColor="@color/colorBlackLight"
+                        app:cardCornerRadius="5dp">
 
                         <com.github.mikephil.charting.charts.BarChart
                             android:id="@+id/barChart"
