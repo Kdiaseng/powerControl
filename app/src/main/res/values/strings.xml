@@ -17,4 +17,6 @@
 
     <string name="valor">14845</string>
     <string name="consumption_period_value">22/04/2020</string>
+    <string name="valor_total">Valor total:</string>
+    <string name="preposition">à</string>
 </resources>
