@@ -1,14 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorGreenAccent"
+    android:paddingStart="15dp"
+    android:paddingEnd="15dp"
     tools:context=".RegisterCountPowerFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/textView_month_selected"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
 
-</FrameLayout>
+        android:layout_marginTop="24dp"
+        android:gravity="center_horizontal"
+        android:text="@string/abril"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="ma"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_month_selected">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/palette1BlackLight">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/TxtLayout_read_current"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.MyTextInput"
+                    android:hint="@string/read_current">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/textInput_read_current"
+                        style="@style/StyleEditText"
+                        android:inputType="number" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/TxtLayout_measured_consumption"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.MyTextInput"
+                    android:hint="@string/measured_consumption">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/textInput_measured_consumption"
+                        style="@style/StyleEditText"
+                        android:inputType="number" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/TxtLayout_billed_consumption"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.MyTextInput"
+                    android:hint="@string/billed_consumption">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/textInput_billed_consumption"
+                        style="@style/StyleEditText"
+                        android:inputType="number" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/TxtLayout_street_lighting"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.MyTextInput"
+                    android:hint="@string/street_lighting">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/textInput_street_lighting"
+                        style="@style/StyleEditText"
+                        android:inputType="number" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/TxtLayout_rate"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.MyTextInput"
+                    android:hint="@string/rate">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/textInput_rate"
+                        style="@style/StyleEditText"
+                        android:inputType="number" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/TxtLayout_date_init"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.MyTextInput"
+                    android:hint="@string/date_init"
+                    app:endIconDrawable="@drawable/ic_date_range_black_24dp"
+                    app:endIconMode="custom"
+                    app:endIconTint="@color/colorGreenAccent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/textInput_date_init"
+                        style="@style/StyleEditText"
+                        android:inputType="number" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/TxtLayout_date_end"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.MyTextInput"
+                    android:hint="@string/date_end"
+                    app:endIconDrawable="@drawable/ic_date_range_black_24dp"
+                    app:endIconMode="custom"
+                    app:endIconTint="@color/colorGreenAccent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/textInput_date_end"
+                        style="@style/StyleEditText"
+                        android:inputType="number" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/register"
+                    android:textColor="@color/colorGreenAccent" />
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

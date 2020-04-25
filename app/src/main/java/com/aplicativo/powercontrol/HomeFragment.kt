@@ -9,6 +9,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.aplicativo.powercontrol.adapter.MonthAdapter
@@ -52,6 +53,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
         loadMonthInRecyclerView(recyclerView_months)
         ploteChart(barChart)
+        floatingActionButtonAddOrUpdate.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.registerCountPowerFragment, null))
 
     }
 

@@ -19,4 +19,9 @@ class RegisterCountPowerFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_register_count_power, container, false)
     }
 
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+    }
+
 }

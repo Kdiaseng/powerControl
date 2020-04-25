@@ -58,12 +58,12 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/TextInputEditText_product_code"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:endIconTint="@color/colorGreenAccent"
                 android:layout_width="100dp"
                 android:layout_height="69dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:hint="@string/ano"
-                app:startIconTint="@color/colorGreenAccent"
                 app:hintTextColor= "@color/colorGreenAccent"
                 app:boxStrokeColor="@color/colorGreenAccent"
                 android:textColorHint="@color/colorGreenAccent"
@@ -71,8 +71,8 @@
                 app:errorEnabled="true">
 
                 <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                    android:id="@+id/autoCompleteTextView_year"
                     style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
+                    android:id="@+id/autoCompleteTextView_year"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorGreenAccent" />
@@ -294,7 +294,7 @@
             app:fabAlignmentMode="end" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
+            android:id="@+id/floatingActionButtonAddOrUpdate"
             app:backgroundTint="@color/colorGreenAccent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

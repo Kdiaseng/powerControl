@@ -23,4 +23,20 @@
         <item name="android:layout_height">42dp</item>
     </style>
 
+
+    <style name="Widget.MaterialComponents.TextInputLayout.OutlinedBox.MyTextInput">
+        <item name="boxStrokeColor">@color/colorGreenAccent</item>
+        <item name="errorEnabled">true</item>
+        <item name="hintTextColor">@color/colorGreenAccent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColorHint">@color/colorGreenAccent</item>
+    </style>
+
+    <style name="StyleEditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorGreenAccent</item>
+    </style>
+
 </resources>

@@ -11,6 +11,7 @@
     <color name="colorBlackToGray">#282d32</color>#92a3b2
     <color name="colorGrayLight">#92a3b2</color>
     <color name="colorOrange">#f79413</color>
+    <color name="colorGreenDark">#3c8d2f</color>
 
     <!-- palette color dark to blue   -->
     <color name="paletteBlack">#212121</color>
@@ -30,7 +31,7 @@
     <color name="palette2RedLight">#c72c41</color>
     <color name="palette2Red">#ee4540</color>
 
-    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#fff</color>
+    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#3c8d2f</color>
 
 
 </resources>
