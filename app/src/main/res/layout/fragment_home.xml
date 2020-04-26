@@ -12,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         app:cardBackgroundColor="@color/colorBlackLight"
         app:cardCornerRadius="5dp"
@@ -27,9 +27,9 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_gravity="center"
                 android:layout_width="202dp"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:orientation="vertical">
 
                 <TextView
@@ -58,21 +58,21 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/TextInputEditText_product_code"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                app:endIconTint="@color/colorGreenAccent"
                 android:layout_width="100dp"
                 android:layout_height="69dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:hint="@string/ano"
-                app:hintTextColor= "@color/colorGreenAccent"
-                app:boxStrokeColor="@color/colorGreenAccent"
                 android:textColorHint="@color/colorGreenAccent"
+                app:boxStrokeColor="@color/colorGreenAccent"
                 app:endIconMode="dropdown_menu"
-                app:errorEnabled="true">
+                app:endIconTint="@color/colorGreenAccent"
+                app:errorEnabled="true"
+                app:hintTextColor="@color/colorGreenAccent">
 
                 <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                    style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
                     android:id="@+id/autoCompleteTextView_year"
+                    style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorGreenAccent" />

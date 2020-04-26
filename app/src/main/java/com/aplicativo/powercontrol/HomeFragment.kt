@@ -1,5 +1,6 @@
 package com.aplicativo.powercontrol
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -46,6 +47,10 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, YEARS)
         autoCompleteTextView_year.setAdapter(adapter)
 
+        if((activity as MainActivity).supportActionBar!!.isShowing){
+            (activity as MainActivity).supportActionBar!!.hide()
+        }
+
         autoCompleteTextView_year.setOnTouchListener { _, _ ->
             autoCompleteTextView_year.showDropDown()
             return@setOnTouchListener false
@@ -56,6 +61,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         floatingActionButtonAddOrUpdate.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.registerCountPowerFragment, null))
 
     }
+
 
     private fun ploteChart(barChart: BarChart?) {
        val entries = ArrayList<BarEntry>()

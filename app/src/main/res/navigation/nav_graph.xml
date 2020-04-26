@@ -17,6 +17,6 @@
     <fragment
         android:id="@+id/registerCountPowerFragment"
         android:name="com.aplicativo.powercontrol.RegisterCountPowerFragment"
-        android:label="fragment_register_count_power"
+        android:label=""
         tools:layout="@layout/fragment_register_count_power" />
 </navigation>

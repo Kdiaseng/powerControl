@@ -30,7 +30,12 @@ class RegisterCountPowerFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+//
+//        val actionBar = (activity as MainActivity).supportActionBar
+//        if(!actionBar!!.isShowing){
+//            actionBar.show()
+////            actionBar.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//        }
 
         TxtLayout_date_init.setEndIconOnClickListener {
             DatePickerDialog(
