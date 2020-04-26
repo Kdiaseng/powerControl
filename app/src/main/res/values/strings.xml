@@ -19,9 +19,9 @@
     <string name="consumption_period_value">22/04/2020</string>
     <string name="valor_total">Valor total:</string>
     <string name="preposition">à</string>
-    <string name="abril">ABRIL</string>
+    <string name="abril">Registro do mês de Abril</string>
     <string name="cadastrar">save</string>
-    <string name="date_init">data inicial</string>
-    <string name="date_end">data final</string>
+    <string name="date_init">Data inicial</string>
+    <string name="date_end">Data final</string>
     <string name="register">CADASTRAR</string>
 </resources>

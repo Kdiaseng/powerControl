@@ -19,6 +19,10 @@ class MainActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_main)
 
+        if (supportActionBar != null) {
+            supportActionBar!!.hide();
+        }
+
         navController = Navigation.findNavController(this, R.id.navHostFragment)
         NavigationUI.setupActionBarWithNavController(this, navController)
     }
