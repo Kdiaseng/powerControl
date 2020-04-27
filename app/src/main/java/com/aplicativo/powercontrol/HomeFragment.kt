@@ -10,6 +10,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
+import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -28,6 +29,8 @@ import java.util.ArrayList
  */
 class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
+    var navController: NavController? = null
+
     companion object{
         val YEARS = listOf( "2018", "2019","2020")
         val MONTH = listOf("JAN", "FER","MAR", "ABR","MAI","JUN")
@@ -39,6 +42,11 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        navController = Navigation.findNavController(view)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -58,10 +66,11 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
         loadMonthInRecyclerView(recyclerView_months)
         ploteChart(barChart)
-        floatingActionButtonAddOrUpdate.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.registerCountPowerFragment, null))
+        floatingActionButtonAddOrUpdate.setOnClickListener {
+            navController!!.navigate(R.id.action_homeFragment_to_registerCountPowerFragment)
+        }
 
     }
-
 
     private fun ploteChart(barChart: BarChart?) {
        val entries = ArrayList<BarEntry>()
