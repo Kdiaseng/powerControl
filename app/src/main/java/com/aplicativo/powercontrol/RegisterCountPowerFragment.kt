@@ -16,8 +16,7 @@ import java.util.*
  */
 class RegisterCountPowerFragment : Fragment() {
 
-    val calendar = Calendar.getInstance()
-
+   private val calendar = Calendar.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,8 +53,6 @@ class RegisterCountPowerFragment : Fragment() {
                 calendar.get(Calendar.DAY_OF_MONTH)
             ).show()
         }
-
-
     }
 
     private fun updateData(year: Int, month: Int, dayOfMonth: Int, texField: TextInputEditText) {
@@ -67,6 +64,5 @@ class RegisterCountPowerFragment : Fragment() {
         simpleDateFormat.format(calendar.time)
         texField.setText(simpleDateFormat.format(calendar.time))
     }
-
 
 }
