@@ -168,3 +168,8 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
 
 }
+
+
+class Product (val data : String, val valor: Double)
+
+

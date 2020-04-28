@@ -248,7 +248,7 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="325dp"
                         android:layout_height="307dp"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginEnd="15dp"
                         app:cardBackgroundColor="@color/colorBlackLight"
                         app:cardCornerRadius="5dp">
 
@@ -265,9 +265,9 @@
 
                     <androidx.cardview.widget.CardView
                         app:cardCornerRadius="5dp"
-                        android:layout_marginEnd="10dp"
+                        android:paddingStart="10dp"
                         app:cardBackgroundColor="@color/colorBlackLight"
-                        android:layout_width="325dp"
+                        android:layout_width="330dp"
                         android:layout_height="307dp">
 
                         <com.github.mikephil.charting.charts.LineChart

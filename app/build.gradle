@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
 
 android {
     compileSdkVersion 29
@@ -44,4 +46,8 @@ dependencies {
 
     implementation 'com.github.PhilJay:MPAndroidChart:v2.2.4'
     implementation 'com.google.android.material:material:1.1.0'
+
+    //room
+    implementation "android.arch.persistence.room:runtime:1.1.1"
+    kapt "android.arch.persistence.room:compiler:1.1.1"
 }
