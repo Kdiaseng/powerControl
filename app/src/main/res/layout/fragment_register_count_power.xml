@@ -152,12 +152,25 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/TxtLayout_amount"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.MyTextInput"
+                    android:hint="@string/amount">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/textInput_amount"
+                        style="@style/StyleEditText"
+                        android:inputType="numberDecimal" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
             </LinearLayout>
         </ScrollView>
 
     </androidx.cardview.widget.CardView>
 
     <Button
+        android:id="@+id/buttonSaveOrUpdate"
         style="?attr/materialButtonOutlinedStyle"
         android:layout_width="match_parent"
         android:layout_height="60dp"

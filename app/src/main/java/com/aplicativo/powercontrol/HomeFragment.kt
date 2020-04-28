@@ -14,11 +14,16 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.aplicativo.powercontrol.R.id.action_homeFragment_to_registerCountPowerFragment
 import com.aplicativo.powercontrol.adapter.MonthAdapter
+import com.aplicativo.powercontrol.database.AppDataBase
+import com.aplicativo.powercontrol.domain.ElectricityBill
+import com.aplicativo.powercontrol.dto.MesDto
+import com.aplicativo.powercontrol.dto.YearAndMonthNumberArgsDto
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.utils.ColorTemplate
+import kotlinx.android.synthetic.main.card_data.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -29,6 +34,8 @@ import kotlin.collections.ArrayList
 class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
     var navController: NavController? = null
+    private var electricityBill : ElectricityBill? = null
+
 
     companion object {
         val YEARS = listOf("2018", "2019", "2020")
@@ -51,9 +58,12 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        showDataInScreen()
+
         val adapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, YEARS)
         autoCompleteTextView_year.setAdapter(adapter)
+
 
         if ((activity as MainActivity).supportActionBar!!.isShowing) {
             (activity as MainActivity).supportActionBar!!.hide()
@@ -68,8 +78,17 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         plotBarChart(barChart)
         plotLineChart(lineChart)
         floatingActionButtonAddOrUpdate.setOnClickListener {
-            navController!!.navigate(action_homeFragment_to_registerCountPowerFragment)
+            if (isSave()){
+                val action = HomeFragmentDirections.actionHomeFragmentToRegisterCountPowerFragment()
+                action.yearAndMonthNumber = YearAndMonthNumberArgsDto(MesDto(4, "ABR"), 2020)
+                 Navigation.findNavController(it).navigate(action)
+            }
         }
+
+    }
+
+    private fun showDataInScreen() {
+       val obj =  AppDataBase(requireActivity()).electricityBillDao().getElectricityBillAllByMonthNumber(4,2020)
 
     }
 
@@ -166,10 +185,11 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         Toast.makeText(requireContext(), month, Toast.LENGTH_SHORT).show()
     }
 
+    private fun isSave() = electricityBill == null
 
 }
 
 
-class Product (val data : String, val valor: Double)
+
 
 

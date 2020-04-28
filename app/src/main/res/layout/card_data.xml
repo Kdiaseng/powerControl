@@ -18,6 +18,7 @@
                 android:textColor="@color/colorGreenAccent" />
 
             <TextView
+                android:id="@+id/textView_card_read_current"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -41,6 +42,7 @@
                 android:textColor="@color/colorGreenAccent" />
 
             <TextView
+                android:id="@+id/textView_card_read_last"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -62,6 +64,7 @@
                 android:textColor="@color/colorGreenAccent" />
 
             <TextView
+                android:id="@+id/textView_card_measured_consumption"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -83,6 +86,7 @@
                 android:text="@string/billed_consumption" />
 
             <TextView
+                android:id="@+id/textView_card_billed_consumption"
                 android:textColor="@color/colorGreenAccent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -106,6 +110,7 @@
                 android:text="@string/rate" />
 
             <TextView
+                android:id="@+id/textView_card_rate"
                 android:textColor="@color/colorGreenAccent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -129,6 +134,7 @@
                 android:text="@string/street_lighting" />
 
             <TextView
+                android:id="@+id/textView_card_street_lighting"
                 android:textColor="@color/colorGreenAccent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

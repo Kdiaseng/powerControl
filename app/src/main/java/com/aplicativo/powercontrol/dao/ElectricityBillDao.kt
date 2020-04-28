@@ -10,11 +10,11 @@ interface ElectricityBillDao {
     @Query("SELECT * FROM electricity_bill")
     fun getElectricityBillAll(): List<ElectricityBill>
 
-    @Query("SELECT * FROM electricity_bill WHERE month_number =:monthNumber ")
-    fun getElectricityBillAllByMonthNumber(monthNumber: Int): ElectricityBill
+    @Query("SELECT * FROM electricity_bill WHERE month_number =:monthNumber AND year =:year ")
+    fun getElectricityBillAllByMonthNumber(monthNumber: Int, year: Int): ElectricityBill
 
-    @Query("SELECT month_number, amount FROM electricity_bill")
-    fun getElectricityBillDtoAll(): List<ElectricityBillDto>
+    @Query("SELECT month_number, amount FROM electricity_bill WHERE year =:year")
+    fun getElectricityBillDtoAll(year: Int): List<ElectricityBillDto>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun addElectricityBill(electricityBill: ElectricityBill)

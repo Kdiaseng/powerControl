@@ -8,6 +8,8 @@ import java.io.Serializable
 @Entity(tableName = "electricity_bill")
 data class ElectricityBill(
 
+    val year: Int,
+
     @ColumnInfo(name = "month_number")
     val monthNumber: Int,
 

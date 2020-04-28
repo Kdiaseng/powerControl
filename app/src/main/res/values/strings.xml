@@ -24,4 +24,5 @@
     <string name="date_init">Data inicial</string>
     <string name="date_end">Data final</string>
     <string name="register">CADASTRAR</string>
+    <string name="amount">Valor Total</string>
 </resources>
