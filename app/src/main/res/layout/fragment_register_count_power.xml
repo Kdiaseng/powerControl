@@ -31,7 +31,7 @@
         android:layout_marginEnd="20dp"
         android:fontFamily="@font/paytone_one"
         android:gravity="start"
-        android:text="@string/abril"
+        android:text="@string/register_month_label"
         android:textColor="@color/palette1BlackLight"
         android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"

@@ -7,14 +7,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aplicativo.powercontrol.R
 import com.aplicativo.powercontrol.adapter.MonthAdapter.ViewHolder
+import com.aplicativo.powercontrol.dto.MesDto
 import kotlinx.android.synthetic.main.item_month.view.*
 
-class MonthAdapter(val months: List<String>, var itemClickListener: OnMonthListener) :
+class MonthAdapter(private val months: List<MesDto>, var itemClickListener: OnMonthListener) :
     RecyclerView.Adapter<ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        fun bindView(month: String, action: OnMonthListener){
-            itemView.textView_month.text = month
+        fun bindView(month: MesDto, action: OnMonthListener){
+            itemView.textView_month.text = month.name
             itemView.setOnClickListener {
                 action.onClickMonth(month)
             }
@@ -37,7 +38,7 @@ class MonthAdapter(val months: List<String>, var itemClickListener: OnMonthListe
         holder.bindView(moth, itemClickListener)
     }
     public interface OnMonthListener {
-        fun onClickMonth(month: String)
+        fun onClickMonth(month: MesDto)
     }
 
 }

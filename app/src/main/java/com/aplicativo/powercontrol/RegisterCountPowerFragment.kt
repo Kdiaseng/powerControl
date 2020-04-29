@@ -39,6 +39,7 @@ class RegisterCountPowerFragment : Fragment() {
         arguments?.let {
             yearAndMonthNumberArgsDto =
                 RegisterCountPowerFragmentArgs.fromBundle(it).yearAndMonthNumber
+            textView_month_selected.text = getString(R.string.register_month_label, yearAndMonthNumberArgsDto!!.mesDto.name)
         }
 
         buttonSaveOrUpdate.setOnClickListener {
