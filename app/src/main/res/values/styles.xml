@@ -39,4 +39,22 @@
         <item name="android:textColor">@color/colorGreenAccent</item>
     </style>
 
+    <style name="style_text_value">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:fontFamily">@font/paytone_one</item>
+        <item name="android:gravity">end</item>
+        <item name="android:textColor">@color/colorGreenAccent</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="style_text_data">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:fontFamily">@font/paytone_one</item>
+        <item name="android:textColor">@color/colorGreenAccent</item>
+    </style>
+
 </resources>

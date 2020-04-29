@@ -1,7 +1,9 @@
 package com.aplicativo.powercontrol
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +14,6 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.aplicativo.powercontrol.R.id.action_homeFragment_to_registerCountPowerFragment
 import com.aplicativo.powercontrol.adapter.MonthAdapter
 import com.aplicativo.powercontrol.database.AppDataBase
 import com.aplicativo.powercontrol.domain.ElectricityBill
@@ -21,10 +22,10 @@ import com.aplicativo.powercontrol.dto.YearAndMonthNumberArgsDto
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.*
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.utils.ColorTemplate
-import kotlinx.android.synthetic.main.card_data.*
+import kotlinx.android.synthetic.main.card_data.view.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -57,7 +58,9 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        val calendar = Calendar.getInstance()
+        val df1 = SimpleDateFormat("MM", Locale("pt", "BR"))
+        val month1 = df1.format(calendar.time)
         showDataInScreen()
 
         val adapter =
@@ -87,8 +90,19 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
     }
 
-    private fun showDataInScreen() {
+     private fun showDataInScreen() {
        val obj =  AppDataBase(requireActivity()).electricityBillDao().getElectricityBillAllByMonthNumber(4,2020)
+         if (obj != null){
+             card_data_energy.textView_card_read_current.text = getString(R.string.kilowatt_hour, obj.currentReading)
+             card_data_energy.textView_card_read_last.text = getString(R.string.kilowatt_hour,0)
+             card_data_energy.textView_card_measured_consumption.text = getString(R.string.kilowatt_hour,obj.measuredConsumption)
+             card_data_energy.textView_card_billed_consumption.text = getString(R.string.kilowatt_hour,obj.billedConsumption)
+             card_data_energy.textView_card_rate.text = obj.rate.toString()
+             card_data_energy.textView_card_street_lighting.text = getString(R.string.real,obj.streetLighting)
+             textView_consumption_period_value.text = obj.initDate
+             textView_consumption_period_value_end.text = obj.endDate
+             texView_amount.text = obj.amount.toString()
+         }
 
     }
 
@@ -121,7 +135,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
             "DEZ"
         )
 
-        val lineDataSet = LineDataSet(entries, "merda")
+        val lineDataSet = LineDataSet(entries, "LineChart")
         val lineData = LineData(labels, lineDataSet )
         lineChart!!.data = lineData
         lineChart.axisLeft.textColor = Color.WHITE
@@ -130,6 +144,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         lineDataSet.valueTextColor = Color.WHITE
         lineDataSet.setCircleColor(Color.GREEN)
         lineChart.xAxis.textColor = Color.WHITE
+        lineChart.animateX(5000)
     }
 
 
