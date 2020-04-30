@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -39,7 +40,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
     private var listMonth = ArrayList<MesDto>()
     private var listValues = ArrayList<ElectricityBillDto>()
     private var mesDto: MesDto? = null
-    private var yearCurrent: Int = 0
+    private var yearSelect: Int = 0
     private var years = ArrayList<Int>()
 
 
@@ -60,13 +61,16 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         super.onActivityCreated(savedInstanceState)
 
         mesDto = getMesDtoCurrent()
-        yearCurrent = getCurrentYear()
+        yearSelect = getCurrentYear()
 
-        loadYears()
-        showDataInScreen(mesDto!!.number, yearCurrent)
+        if (years.isEmpty())
+            loadYears()
+
+        showDataInScreen(mesDto!!.number, yearSelect)
+
         val adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, years)
-        autoCompleteTextView_year.setAdapter(adapter)
+            ArrayAdapter(requireContext(), R.layout.spinner_item, years)
+        spinner_years.adapter = adapter
 
         loadLists()
 
@@ -74,9 +78,19 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
             (activity as MainActivity).supportActionBar!!.hide()
         }
 
-        autoCompleteTextView_year.setOnTouchListener { _, _ ->
-            autoCompleteTextView_year.showDropDown()
-            return@setOnTouchListener false
+        spinner_years.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                yearSelect = years[position]
+                showDataInScreen(mesDto!!.number, yearSelect)
+            }
         }
 
         loadMonthInRecyclerView(recyclerView_months)
@@ -85,7 +99,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         floatingActionButtonAddOrUpdate.setOnClickListener {
             if (isSave()){
                 val action = HomeFragmentDirections.actionHomeFragmentToRegisterCountPowerFragment()
-                action.dateArgs = DateArgsDto(mesDto!!, 2020)
+                action.dateArgs = DateArgsDto(mesDto!!, yearSelect)
                  Navigation.findNavController(it).navigate(action)
             }
         }
@@ -96,9 +110,9 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         val listDtos =  AppDataBase(requireActivity()).electricityBillDao().getElectricityBillAll()
         val electricityBillYearMin = listDtos.minBy { it.year }
         if (listDtos.isNullOrEmpty()){
-           years.add(yearCurrent)
+           years.add(yearSelect)
         }else{
-            for(ano in electricityBillYearMin!!.year..yearCurrent){
+            for(ano in yearSelect downTo electricityBillYearMin!!.year ){
                 years.add(ano)
             }
         }
@@ -144,7 +158,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
     private fun loadLists(){
         listMonth = DateFacilitator.getMonthsListToCurrentMonth(getMesDtoCurrent().number)
-        val list =  AppDataBase(requireActivity()).electricityBillDao().getElectricityBillDtoAll(2020).toTypedArray()
+        val list =  AppDataBase(requireActivity()).electricityBillDao().getElectricityBillDtoAll(yearSelect).toTypedArray()
         listValues.addAll(list)
        // labels = listMonth.map { mesDto -> mesDto.name } as ArrayList
     }
@@ -196,7 +210,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
     override fun onClickMonth(month: MesDto) {
         mesDto = month
-        showDataInScreen(mesDto!!.number, 2020)
+        showDataInScreen(mesDto!!.number, yearSelect)
         Toast.makeText(requireContext(), month.name, Toast.LENGTH_SHORT).show()
     }
 
