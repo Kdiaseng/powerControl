@@ -24,8 +24,8 @@
         android:label=""
         tools:layout="@layout/fragment_register_count_power">
         <argument
-            android:name="yearAndMonthNumber"
-            app:argType="com.aplicativo.powercontrol.dto.YearAndMonthNumberArgsDto"
+            android:name="dateArgs"
+            app:argType="com.aplicativo.powercontrol.dto.DateArgsDto"
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>

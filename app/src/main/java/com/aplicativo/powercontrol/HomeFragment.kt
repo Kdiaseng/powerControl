@@ -1,9 +1,7 @@
 package com.aplicativo.powercontrol
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,9 +15,9 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.aplicativo.powercontrol.adapter.MonthAdapter
 import com.aplicativo.powercontrol.database.AppDataBase
 import com.aplicativo.powercontrol.domain.ElectricityBill
+import com.aplicativo.powercontrol.dto.DateArgsDto
 import com.aplicativo.powercontrol.dto.ElectricityBillDto
 import com.aplicativo.powercontrol.dto.MesDto
-import com.aplicativo.powercontrol.dto.YearAndMonthNumberArgsDto
 import com.aplicativo.powercontrol.utils.DateFacilitator
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
@@ -36,15 +34,14 @@ import kotlin.collections.ArrayList
  */
 class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
-    var navController: NavController? = null
+    private var navController: NavController? = null
     private var electricityBill : ElectricityBill? = null
-    var listMonth = ArrayList<MesDto>()
+    private var listMonth = ArrayList<MesDto>()
     private var listValues = ArrayList<ElectricityBillDto>()
-    private var mesDto  = MesDto(getNumberCurrentMonth(), "2020")
+    private var mesDto: MesDto? = null
+    private var yearCurrent: Int = 0
+    private var years = ArrayList<Int>()
 
-    companion object {
-        val YEARS = listOf("2018", "2019", "2020")
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,9 +58,14 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        showDataInScreen(mesDto.number, 2020)
+
+        mesDto = getMesDtoCurrent()
+        yearCurrent = getCurrentYear()
+
+        loadYears()
+        showDataInScreen(mesDto!!.number, yearCurrent)
         val adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, YEARS)
+            ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, years)
         autoCompleteTextView_year.setAdapter(adapter)
 
         loadLists()
@@ -83,14 +85,31 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         floatingActionButtonAddOrUpdate.setOnClickListener {
             if (isSave()){
                 val action = HomeFragmentDirections.actionHomeFragmentToRegisterCountPowerFragment()
-                action.yearAndMonthNumber = YearAndMonthNumberArgsDto(mesDto, 2020)
+                action.dateArgs = DateArgsDto(mesDto!!, 2020)
                  Navigation.findNavController(it).navigate(action)
             }
         }
 
     }
 
-     private fun showDataInScreen(monthNumber: Int, year: Int) {
+    private fun loadYears() {
+        val listDtos =  AppDataBase(requireActivity()).electricityBillDao().getElectricityBillAll()
+        val electricityBillYearMin = listDtos.minBy { it.year }
+        if (listDtos.isNullOrEmpty()){
+           years.add(yearCurrent)
+        }else{
+            for(ano in electricityBillYearMin!!.year..yearCurrent){
+                years.add(ano)
+            }
+        }
+    }
+
+    private fun getCurrentYear(): Int {
+        val calendar = Calendar.getInstance()
+       return calendar[Calendar.YEAR]
+    }
+
+    private fun showDataInScreen(monthNumber: Int, year: Int) {
        val obj =  AppDataBase(requireActivity()).electricityBillDao().getElectricityBillAllByMonthNumber(monthNumber,year)
          if (obj != null){
              card_data_energy.textView_card_read_current.text = getString(R.string.kilowatt_hour, obj.currentReading)
@@ -124,7 +143,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
     }
 
     private fun loadLists(){
-        listMonth = DateFacilitator.getMonthsListToCurrentMonth(getNumberCurrentMonth())
+        listMonth = DateFacilitator.getMonthsListToCurrentMonth(getMesDtoCurrent().number)
         val list =  AppDataBase(requireActivity()).electricityBillDao().getElectricityBillDtoAll(2020).toTypedArray()
         listValues.addAll(list)
        // labels = listMonth.map { mesDto -> mesDto.name } as ArrayList
@@ -170,7 +189,6 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
 
     private fun loadMonthInRecyclerView(recycle: RecyclerView?) {
-        listMonth = DateFacilitator.getMonthsListToCurrentMonth(getNumberCurrentMonth())
         recycle!!.adapter = MonthAdapter(listMonth, this)
         val layoutManger = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
         recycle.layoutManager = layoutManger
@@ -178,14 +196,15 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
     override fun onClickMonth(month: MesDto) {
         mesDto = month
-        showDataInScreen(mesDto.number, 2020)
+        showDataInScreen(mesDto!!.number, 2020)
         Toast.makeText(requireContext(), month.name, Toast.LENGTH_SHORT).show()
     }
 
-    private fun getNumberCurrentMonth(): Int{
+    private fun getMesDtoCurrent(): MesDto{
         val calendar = Calendar.getInstance()
         val df1 = SimpleDateFormat("MM", Locale("pt", "BR"))
-        return df1.format(calendar.time).toInt()
+        val monthNUmber = df1.format(calendar.time).toInt()
+        return MesDto(monthNUmber, DateFacilitator.getMonthByNumber(monthNUmber).name)
     }
 
     private fun isSave() = electricityBill == null

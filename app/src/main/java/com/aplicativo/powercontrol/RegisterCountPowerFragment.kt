@@ -1,6 +1,5 @@
 package com.aplicativo.powercontrol
 
-import android.app.Activity
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,19 +9,17 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.aplicativo.powercontrol.database.AppDataBase
 import com.aplicativo.powercontrol.domain.ElectricityBill
-import com.aplicativo.powercontrol.dto.YearAndMonthNumberArgsDto
+import com.aplicativo.powercontrol.dto.DateArgsDto
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.fragment_register_count_power.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-/**
- * A simple [Fragment] subclass.
- */
+
 class RegisterCountPowerFragment : Fragment() {
 
     private val calendar = Calendar.getInstance()
-    private var yearAndMonthNumberArgsDto: YearAndMonthNumberArgsDto? = null
+    private var dateArgsDto: DateArgsDto? = null
     private var electricityBill: ElectricityBill? = null
 
     override fun onCreateView(
@@ -37,9 +34,9 @@ class RegisterCountPowerFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         arguments?.let {
-            yearAndMonthNumberArgsDto =
-                RegisterCountPowerFragmentArgs.fromBundle(it).yearAndMonthNumber
-            textView_month_selected.text = getString(R.string.register_month_label, yearAndMonthNumberArgsDto!!.mesDto.name)
+            dateArgsDto =
+                RegisterCountPowerFragmentArgs.fromBundle(it).dateArgs
+            textView_month_selected.text = getString(R.string.register_month_label, dateArgsDto!!.mesDto.name)
         }
 
         buttonSaveOrUpdate.setOnClickListener {
@@ -79,8 +76,8 @@ class RegisterCountPowerFragment : Fragment() {
 
     private fun buildElectricityBillObject(): ElectricityBill? {
         return ElectricityBill(
-            yearAndMonthNumberArgsDto!!.year,
-            yearAndMonthNumberArgsDto!!.mesDto.number,
+            dateArgsDto!!.year,
+            dateArgsDto!!.mesDto.number,
             textInput_read_current.text.toString().toInt(),
             textInput_measured_consumption.text.toString().toInt(),
             textInput_billed_consumption.text.toString().toInt(),

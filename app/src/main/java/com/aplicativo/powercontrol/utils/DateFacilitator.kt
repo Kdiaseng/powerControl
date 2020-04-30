@@ -6,18 +6,18 @@ object DateFacilitator {
 
     private val MONTHS =
         listOf(
-            MesDto(1, "JAN"),
-            MesDto(2, "FER"),
-            MesDto(3, "MAR"),
-            MesDto(4, "ABR"),
-            MesDto(5, "MAI"),
-            MesDto(6, "JUN"),
-            MesDto(7, "JUL"),
-            MesDto(8, "AGO"),
-            MesDto(9, "SET"),
-            MesDto(10, "OUT"),
-            MesDto(11, "NOV"),
-            MesDto(12, "DEZ")
+            MesDto(1, "JANEIRO"),
+            MesDto(2, "FERVEREIRO"),
+            MesDto(3, "MARÇO"),
+            MesDto(4, "ABRIL"),
+            MesDto(5, "MAIO"),
+            MesDto(6, "JUNHO"),
+            MesDto(7, "JULHO"),
+            MesDto(8, "AGOSTO"),
+            MesDto(9, "SETEMBRO"),
+            MesDto(10, "OUTUBRO"),
+            MesDto(11, "NOVEMBRO"),
+            MesDto(12, "DEZEMBRO")
         )
 
     fun getMonthsListToCurrentMonth(month: Int): ArrayList<MesDto> {
