@@ -63,7 +63,6 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         mesDto = getMesDtoCurrent()
         yearSelect = getCurrentYear()
 
-
         if (years.isEmpty())
             loadYears()
 
@@ -177,7 +176,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
     private fun plotLineChart(lineChart: LineChart?) {
         val entries = ArrayList<Entry>()
-        val labels = listMonth.map { mesDto -> mesDto.name }
+        val labels = listMonth.map { mesDto -> mesDto.name.substring(0,3) }
         loadListEntry(listValues, entries)
         val lineDataSet = LineDataSet(entries, "LineChart")
         val lineData = LineData(labels, lineDataSet)
@@ -191,12 +190,12 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         lineChart.animateX(5000)
     }
 
-    private fun loadLists(dez: Int = 12) {
-        listMonth = DateFacilitator.getMonthsListToCurrentMonth(dez)
+    private fun loadLists(default: Int = 12) {
+        listMonth = DateFacilitator.getMonthsListToCurrentMonth(default)
         val list =
             AppDataBase(requireActivity()).electricityBillDao().getElectricityBillDtoAll(yearSelect)
                 .toTypedArray()
-        if (!listValues.isEmpty())
+        if (listValues.isNotEmpty())
             listValues.clear()
 
         listValues.addAll(list)
@@ -206,7 +205,8 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         val entries = ArrayList<BarEntry>()
         loadListBarEntry(listValues, entries)
         val barDataSet = BarDataSet(entries, "Cells")
-        val labels = listMonth.map { mesDto -> mesDto.name }
+        val labels = listMonth.map { mesDto -> mesDto.name.substring(0,3) }
+
         val data = BarData(labels, barDataSet)
         barChart!!.data = data
         barChart.setDescription("Set Bar Chart Description Here")
@@ -244,7 +244,11 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
 
     private fun loadMonthInRecyclerView(recycle: RecyclerView?) {
-        recycle!!.adapter = MonthAdapter(listMonth, this)
+        val listMothSimple = listMonth.map {
+           MesDto( it.number, it.name.substring(0,3))
+        }
+
+        recycle!!.adapter = MonthAdapter(listMothSimple, this)
         val layoutManger = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
         recycle.layoutManager = layoutManger
     }

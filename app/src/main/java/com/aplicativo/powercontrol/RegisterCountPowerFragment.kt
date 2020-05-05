@@ -39,6 +39,7 @@ class RegisterCountPowerFragment : Fragment() {
             textView_month_selected.text = getString(R.string.register_month_label, dateArgsDto!!.mesDto.name)
         }
 
+
         buttonSaveOrUpdate.setOnClickListener {
             electricityBill = buildElectricityBillObject()
             AppDataBase(requireActivity()).electricityBillDao().addElectricityBill(electricityBill!!)
