@@ -110,11 +110,11 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         plotBarChart(barChart)
         plotLineChart(lineChart)
         floatingActionButtonAddOrUpdate.setOnClickListener {
-            if (isSave()) {
-                val action = HomeFragmentDirections.actionHomeFragmentToRegisterCountPowerFragment()
-                action.dateArgs = DateArgsDto(mesDto!!, yearSelect)
-                Navigation.findNavController(it).navigate(action)
-            }
+            val action = HomeFragmentDirections.actionHomeFragmentToRegisterCountPowerFragment()
+             action.dateArgs = DateArgsDto(mesDto!!, yearSelect)
+            if(!isSave())
+             action.electricityBillArgs = electricityBill
+            Navigation.findNavController(it).navigate(action)
         }
 
     }
@@ -137,23 +137,23 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
     }
 
     private fun showDataInScreen(monthNumber: Int, year: Int) {
-        val obj = AppDataBase(requireActivity()).electricityBillDao()
+       electricityBill = AppDataBase(requireActivity()).electricityBillDao()
             .getElectricityBillAllByMonthNumber(monthNumber, year)
 
-        if (obj != null) {
+        if (electricityBill != null) {
             card_data_energy.textView_card_read_current.text =
-                getString(R.string.kilowatt_hour, obj.currentReading)
+                getString(R.string.kilowatt_hour, electricityBill!!.currentReading)
             card_data_energy.textView_card_read_last.text = getString(R.string.kilowatt_hour, 0)
             card_data_energy.textView_card_measured_consumption.text =
-                getString(R.string.kilowatt_hour, obj.measuredConsumption)
+                getString(R.string.kilowatt_hour, electricityBill!!.measuredConsumption)
             card_data_energy.textView_card_billed_consumption.text =
-                getString(R.string.kilowatt_hour, obj.billedConsumption)
-            card_data_energy.textView_card_rate.text = obj.rate.toString()
+                getString(R.string.kilowatt_hour, electricityBill!!.billedConsumption)
+            card_data_energy.textView_card_rate.text = electricityBill!!.rate.toString()
             card_data_energy.textView_card_street_lighting.text =
-                getString(R.string.real, obj.streetLighting)
-            textView_consumption_period_value.text = obj.initDate
-            textView_consumption_period_value_end.text = obj.endDate
-            texView_amount.text = obj.amount.toString()
+                getString(R.string.real, electricityBill!!.streetLighting)
+            textView_consumption_period_value.text = electricityBill!!.initDate
+            textView_consumption_period_value_end.text = electricityBill!!.endDate
+            texView_amount.text = electricityBill!!.amount.toString()
         } else {
             clearFields()
         }
@@ -254,7 +254,16 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         mesDto = month
         loadMonthInRecyclerView(recyclerView_months, mesDto!!.number - 1)
         showDataInScreen(mesDto!!.number, yearSelect)
+        setIconFloatingButton()
         Toast.makeText(requireContext(), month.name, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun setIconFloatingButton() {
+        if (!isSave()){
+            floatingActionButtonAddOrUpdate.setImageResource(android.R.drawable.ic_menu_edit)
+        }else{
+            floatingActionButtonAddOrUpdate.setImageResource(android.R.drawable.ic_input_add)
+        }
     }
 
     private fun getMesDtoCurrent(): MesDto {

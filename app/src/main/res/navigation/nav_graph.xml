@@ -28,5 +28,10 @@
             app:argType="com.aplicativo.powercontrol.dto.DateArgsDto"
             app:nullable="true"
             android:defaultValue="@null" />
+        <argument
+            android:name="electricityBillArgs"
+            app:argType="com.aplicativo.powercontrol.domain.ElectricityBill"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 </navigation>

@@ -21,6 +21,7 @@ class RegisterCountPowerFragment : Fragment() {
     private val calendar = Calendar.getInstance()
     private var dateArgsDto: DateArgsDto? = null
     private var electricityBill: ElectricityBill? = null
+    private var isSave = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,18 +37,37 @@ class RegisterCountPowerFragment : Fragment() {
         arguments?.let {
             dateArgsDto =
                 RegisterCountPowerFragmentArgs.fromBundle(it).dateArgs
-            textView_month_selected.text = getString(R.string.register_month_label, dateArgsDto!!.mesDto.name)
+            textView_month_selected.text =
+                getString(R.string.register_month_label, dateArgsDto!!.mesDto.name)
+            electricityBill = RegisterCountPowerFragmentArgs.fromBundle(it).electricityBillArgs
+            electricityBill?.let {
+                isSave = false
+                buttonSaveOrUpdate.setText("ATUALIZAR")
+                loadDataToUpdate()
+            } ?: run {
+                buttonSaveOrUpdate.setText("CADASTRAR")
+                isSave = true
+            }
         }
 
 
         buttonSaveOrUpdate.setOnClickListener {
             electricityBill = buildElectricityBillObject()
-            AppDataBase(requireActivity()).electricityBillDao().addElectricityBill(electricityBill!!)
+            var messagem = "CADASTRO FEITO COM SUCESSO!"
+            if (isSave){
+                AppDataBase(requireActivity()).electricityBillDao()
+                    .addElectricityBill(electricityBill!!)
+            }else{
+                AppDataBase(requireActivity()).electricityBillDao().updateElectricityBill(electricityBill!!)
+                messagem = "ATUALIZAÇÃO FEITA COM SUCESSO"
+            }
+
             Toast.makeText(
                 activity,
-                "CADASTRO FEITO COM SUCESSO!",
+                messagem,
                 Toast.LENGTH_SHORT
             ).show()
+
         }
 
         TxtLayout_date_init.setEndIconOnClickListener {
@@ -75,8 +95,22 @@ class RegisterCountPowerFragment : Fragment() {
         }
     }
 
+    private fun loadDataToUpdate() {
+        electricityBill?.let {
+            textInput_read_current.setText(electricityBill!!.currentReading.toString())
+            textInput_measured_consumption.setText(electricityBill!!.measuredConsumption.toString())
+            textInput_billed_consumption.setText(electricityBill!!.billedConsumption.toString())
+            textInput_street_lighting.setText(electricityBill!!.streetLighting.toString())
+            textInput_rate.setText(electricityBill!!.rate.toString())
+            textInput_amount.setText(electricityBill!!.amount.toString())
+            textInput_date_init.setText(electricityBill!!.initDate)
+            textInput_date_end.setText(electricityBill!!.endDate)
+        }
+
+    }
+
     private fun buildElectricityBillObject(): ElectricityBill? {
-        return ElectricityBill(
+        val electricityBillNew = ElectricityBill(
             dateArgsDto!!.year,
             dateArgsDto!!.mesDto.number,
             textInput_read_current.text.toString().toInt(),
@@ -86,8 +120,12 @@ class RegisterCountPowerFragment : Fragment() {
             textInput_rate.text.toString().toDouble(),
             textInput_amount.text.toString().toDouble(),
             textInput_date_init.text.toString(),
-            textInput_date_end.text.toString()
-        )
+            textInput_date_end.text.toString())
+        if(!isSave){
+            electricityBillNew.id = electricityBill!!.id
+        }
+
+       return electricityBillNew
     }
 
     private fun updateDate(year: Int, month: Int, dayOfMonth: Int, texField: TextInputEditText) {
