@@ -209,7 +209,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
         val data = BarData(labels, barDataSet)
         barChart!!.data = data
-        barChart.setDescription("Set Bar Chart Description Here")
+        barChart.setDescription("Conta até o mês atual")
         barDataSet.setColors(ColorTemplate.COLORFUL_COLORS)
         barChart.axisRight.textColor = Color.WHITE
         barChart.axisLeft.textColor = Color.WHITE
@@ -255,7 +255,6 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         loadMonthInRecyclerView(recyclerView_months, mesDto!!.number - 1)
         showDataInScreen(mesDto!!.number, yearSelect)
         setIconFloatingButton()
-        Toast.makeText(requireContext(), month.name, Toast.LENGTH_SHORT).show()
     }
 
     private fun setIconFloatingButton() {

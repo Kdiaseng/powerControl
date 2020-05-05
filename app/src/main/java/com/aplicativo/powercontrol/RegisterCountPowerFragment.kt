@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import com.aplicativo.powercontrol.database.AppDataBase
 import com.aplicativo.powercontrol.domain.ElectricityBill
 import com.aplicativo.powercontrol.dto.DateArgsDto
@@ -42,23 +43,34 @@ class RegisterCountPowerFragment : Fragment() {
             electricityBill = RegisterCountPowerFragmentArgs.fromBundle(it).electricityBillArgs
             electricityBill?.let {
                 isSave = false
-                buttonSaveOrUpdate.setText("ATUALIZAR")
+                buttonSaveOrUpdate.text = "ATUALIZAR"
                 loadDataToUpdate()
             } ?: run {
-                buttonSaveOrUpdate.setText("CADASTRAR")
+                buttonSaveOrUpdate.text = "CADASTRAR"
                 isSave = true
             }
         }
 
-
         buttonSaveOrUpdate.setOnClickListener {
+            if (validateFieldEmpty(
+                    textInput_read_current,
+                    textInput_measured_consumption,
+                    textInput_billed_consumption,
+                    textInput_street_lighting,
+                    textInput_rate,
+                    textInput_date_init,
+                    textInput_date_end
+                )
+            ) return@setOnClickListener
+
             electricityBill = buildElectricityBillObject()
             var messagem = "CADASTRO FEITO COM SUCESSO!"
-            if (isSave){
+            if (isSave) {
                 AppDataBase(requireActivity()).electricityBillDao()
                     .addElectricityBill(electricityBill!!)
-            }else{
-                AppDataBase(requireActivity()).electricityBillDao().updateElectricityBill(electricityBill!!)
+            } else {
+                AppDataBase(requireActivity()).electricityBillDao()
+                    .updateElectricityBill(electricityBill!!)
                 messagem = "ATUALIZAÇÃO FEITA COM SUCESSO"
             }
 
@@ -67,6 +79,7 @@ class RegisterCountPowerFragment : Fragment() {
                 messagem,
                 Toast.LENGTH_SHORT
             ).show()
+            backHomeScreen(it)
 
         }
 
@@ -95,6 +108,22 @@ class RegisterCountPowerFragment : Fragment() {
         }
     }
 
+    private fun validateFieldEmpty(vararg fields: TextInputEditText): Boolean {
+        for (field in fields) {
+            if (field.text.toString().trim().isEmpty()) {
+                field.error = "preencha o campo corretamente"
+                field.requestFocus()
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun backHomeScreen(it: View) {
+        Navigation.findNavController(it)
+            .navigate(R.id.action_registerCountPowerFragment_to_homeFragment)
+    }
+
     private fun loadDataToUpdate() {
         electricityBill?.let {
             textInput_read_current.setText(electricityBill!!.currentReading.toString())
@@ -120,12 +149,13 @@ class RegisterCountPowerFragment : Fragment() {
             textInput_rate.text.toString().toDouble(),
             textInput_amount.text.toString().toDouble(),
             textInput_date_init.text.toString(),
-            textInput_date_end.text.toString())
-        if(!isSave){
+            textInput_date_end.text.toString()
+        )
+        if (!isSave) {
             electricityBillNew.id = electricityBill!!.id
         }
 
-       return electricityBillNew
+        return electricityBillNew
     }
 
     private fun updateDate(year: Int, month: Int, dayOfMonth: Int, texField: TextInputEditText) {
@@ -137,5 +167,6 @@ class RegisterCountPowerFragment : Fragment() {
         simpleDateFormat.format(calendar.time)
         texField.setText(simpleDateFormat.format(calendar.time))
     }
+
 
 }
