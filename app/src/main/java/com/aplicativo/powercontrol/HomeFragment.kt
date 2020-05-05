@@ -98,7 +98,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
                         loadLists()
                     }
                     showDataInScreen(mesDto!!.number, yearSelect)
-                    loadMonthInRecyclerView(recyclerView_months)
+                    loadMonthInRecyclerView(recyclerView_months, mesDto!!.number -1)
                     plotBarChart(barChart)
                     plotLineChart(lineChart)
                 }
@@ -106,7 +106,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
             }
         }
 
-        loadMonthInRecyclerView(recyclerView_months)
+        loadMonthInRecyclerView(recyclerView_months, mesDto!!.number - 1)
         plotBarChart(barChart)
         plotLineChart(lineChart)
         floatingActionButtonAddOrUpdate.setOnClickListener {
@@ -243,18 +243,16 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
     }
 
 
-    private fun loadMonthInRecyclerView(recycle: RecyclerView?) {
-        val listMothSimple = listMonth.map {
-           MesDto( it.number, it.name.substring(0,3))
-        }
-
-        recycle!!.adapter = MonthAdapter(listMothSimple, this)
+    private fun loadMonthInRecyclerView(recycle: RecyclerView?, position: Int) {
+        recycle!!.adapter = MonthAdapter(listMonth, this, mesDto!!.number)
         val layoutManger = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
         recycle.layoutManager = layoutManger
+        recycle.scrollToPosition(position)
     }
 
     override fun onClickMonth(month: MesDto) {
         mesDto = month
+        loadMonthInRecyclerView(recyclerView_months, mesDto!!.number - 1)
         showDataInScreen(mesDto!!.number, yearSelect)
         Toast.makeText(requireContext(), month.name, Toast.LENGTH_SHORT).show()
     }

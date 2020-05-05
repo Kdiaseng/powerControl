@@ -97,7 +97,7 @@
                 android:id="@+id/recyclerView_months"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="center_vertical"
                 android:orientation="horizontal"
                 tools:listitem="@layout/item_month" />
         </LinearLayout>
