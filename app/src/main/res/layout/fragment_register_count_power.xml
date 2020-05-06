@@ -63,6 +63,19 @@
                 android:padding="10dp">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:visibility="gone"
+                    android:id="@+id/TxtLayout_read_last"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.MyTextInput"
+                    android:hint="@string/read_last">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/textInput_read_last"
+                        style="@style/StyleEditText"
+                        android:inputType="number" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/TxtLayout_read_current"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.MyTextInput"
                     android:hint="@string/read_current">

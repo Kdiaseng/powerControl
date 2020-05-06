@@ -23,6 +23,7 @@ class RegisterCountPowerFragment : Fragment() {
     private var dateArgsDto: DateArgsDto? = null
     private var electricityBill: ElectricityBill? = null
     private var isSave = false
+    private val JANUARY = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,7 +33,6 @@ class RegisterCountPowerFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_register_count_power, container, false)
     }
 
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         arguments?.let {
@@ -40,6 +40,9 @@ class RegisterCountPowerFragment : Fragment() {
                 RegisterCountPowerFragmentArgs.fromBundle(it).dateArgs
             textView_month_selected.text =
                 getString(R.string.register_month_label, dateArgsDto!!.mesDto.name)
+            if (dateArgsDto!!.mesDto.number == JANUARY && !hasValueLastYear(dateArgsDto!!))
+                TxtLayout_read_last.visibility = View.VISIBLE
+
             electricityBill = RegisterCountPowerFragmentArgs.fromBundle(it).electricityBillArgs
             electricityBill?.let {
                 isSave = false
@@ -52,6 +55,10 @@ class RegisterCountPowerFragment : Fragment() {
         }
 
         buttonSaveOrUpdate.setOnClickListener {
+            if (TxtLayout_read_last.visibility == View.VISIBLE
+                && validateFieldEmpty(textInput_read_last))
+                return@setOnClickListener
+
             if (validateFieldEmpty(
                     textInput_read_current,
                     textInput_measured_consumption,
@@ -64,19 +71,20 @@ class RegisterCountPowerFragment : Fragment() {
             ) return@setOnClickListener
 
             electricityBill = buildElectricityBillObject()
-            var messagem = "CADASTRO FEITO COM SUCESSO!"
+            var message = "CADASTRO FEITO COM SUCESSO!"
             if (isSave) {
-                AppDataBase(requireActivity()).electricityBillDao()
-                    .addElectricityBill(electricityBill!!)
+                saveCount(electricityBill!!)
+                if (TxtLayout_read_last.visibility == View.VISIBLE){
+                    saveDecember()
+                }
             } else {
-                AppDataBase(requireActivity()).electricityBillDao()
-                    .updateElectricityBill(electricityBill!!)
-                messagem = "ATUALIZAÇÃO FEITA COM SUCESSO"
+                updateCount(electricityBill!!)
+                message = "ATUALIZAÇÃO FEITA COM SUCESSO"
             }
 
             Toast.makeText(
                 activity,
-                messagem,
+                message,
                 Toast.LENGTH_SHORT
             ).show()
             backHomeScreen(it)
@@ -106,6 +114,37 @@ class RegisterCountPowerFragment : Fragment() {
                 calendar.get(Calendar.DAY_OF_MONTH)
             ).show()
         }
+    }
+
+    private fun saveDecember() {
+        val billDecember = ElectricityBill(
+            dateArgsDto!!.year - 1,
+            12,
+            textInput_read_last.text.toString().toInt(),
+            0,
+            0,
+            0.0,
+            0.0,
+            0.0,
+            "00/00/000",
+            "00/00/000"
+        )
+        saveCount(billDecember)
+    }
+
+    private fun hasValueLastYear(date: DateArgsDto): Boolean {
+        val result = AppDataBase(requireActivity()).electricityBillDao().getElectricityBillDtoAll(date.year - 1)
+        return result.isNotEmpty()
+    }
+
+    private fun updateCount(bill: ElectricityBill) {
+        AppDataBase(requireActivity()).electricityBillDao()
+            .updateElectricityBill(bill)
+    }
+
+    private fun saveCount(bill: ElectricityBill) {
+        AppDataBase(requireActivity()).electricityBillDao()
+            .addElectricityBill(bill)
     }
 
     private fun validateFieldEmpty(vararg fields: TextInputEditText): Boolean {

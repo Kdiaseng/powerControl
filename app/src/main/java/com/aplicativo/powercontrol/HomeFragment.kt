@@ -2,12 +2,12 @@ package com.aplicativo.powercontrol
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -42,6 +42,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
     private var mesDto: MesDto? = null
     private var yearSelect: Int = 0
     private var years = ArrayList<Int>()
+    private val JANUARY = 1
 
 
     override fun onCreateView(
@@ -91,18 +92,18 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
             ) {
                 if (count >= 1) {
                     yearSelect = years[position]
-                    if (yearSelect == getCurrentYear()){
+                    showDataInScreen(mesDto!!.number, yearSelect)
+                    if (yearSelect == getCurrentYear()) {
                         mesDto = getMesDtoCurrent()
                         loadLists(mesDto!!.number)
                     } else {
                         loadLists()
                     }
-                    showDataInScreen(mesDto!!.number, yearSelect)
-                    loadMonthInRecyclerView(recyclerView_months, mesDto!!.number -1)
+                    loadMonthInRecyclerView(recyclerView_months, mesDto!!.number - 1)
                     plotBarChart(barChart)
                     plotLineChart(lineChart)
                 }
-                count ++
+                count++
             }
         }
 
@@ -111,9 +112,9 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         plotLineChart(lineChart)
         floatingActionButtonAddOrUpdate.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToRegisterCountPowerFragment()
-             action.dateArgs = DateArgsDto(mesDto!!, yearSelect)
-            if(!isSave())
-             action.electricityBillArgs = electricityBill
+            action.dateArgs = DateArgsDto(mesDto!!, yearSelect)
+            if (!isSave())
+                action.electricityBillArgs = electricityBill
             Navigation.findNavController(it).navigate(action)
         }
 
@@ -137,13 +138,12 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
     }
 
     private fun showDataInScreen(monthNumber: Int, year: Int) {
-       electricityBill = AppDataBase(requireActivity()).electricityBillDao()
+        electricityBill = AppDataBase(requireActivity()).electricityBillDao()
             .getElectricityBillAllByMonthNumber(monthNumber, year)
 
         if (electricityBill != null) {
             card_data_energy.textView_card_read_current.text =
                 getString(R.string.kilowatt_hour, electricityBill!!.currentReading)
-            card_data_energy.textView_card_read_last.text = getString(R.string.kilowatt_hour, 0)
             card_data_energy.textView_card_measured_consumption.text =
                 getString(R.string.kilowatt_hour, electricityBill!!.measuredConsumption)
             card_data_energy.textView_card_billed_consumption.text =
@@ -154,11 +154,44 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
             textView_consumption_period_value.text = electricityBill!!.initDate
             textView_consumption_period_value_end.text = electricityBill!!.endDate
             texView_amount.text = electricityBill!!.amount.toString()
+            if (!validateCalculateAmount(electricityBill!!))
+                imageView_icon_validation.setImageResource(R.drawable.erroicon)
+            else
+                imageView_icon_validation.setImageResource(R.drawable.checkyes)
         } else {
             clearFields()
         }
+        card_data_energy.textView_card_read_last.text = getString(R.string.kilowatt_hour, getLastRead())
 
     }
+
+    private fun validateCalculateAmount(electricityBill: ElectricityBill): Boolean{
+        val consumption = electricityBill.billedConsumption
+        val rate = electricityBill.rate
+        val streetLighting = electricityBill.streetLighting
+        val amountInput = electricityBill.amount
+
+        val total = consumption * rate + streetLighting
+        if (total == amountInput )
+            return true
+
+        return false
+    }
+
+
+   private fun getLastRead(): Int{
+       var numberMonth = (mesDto!!.number - 1)
+       var year = yearSelect
+       if (mesDto!!.number == JANUARY){
+           numberMonth = 12
+           year = yearSelect - 1
+       }
+       val last = AppDataBase(requireActivity()).electricityBillDao().getLastRead(numberMonth, year)
+        last?.let {
+            return it
+        }
+       return 0
+   }
 
     private fun clearFields() {
         card_data_energy.textView_card_read_current.text = getString(R.string.kilowatt_hour, 0)
@@ -176,7 +209,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
     private fun plotLineChart(lineChart: LineChart?) {
         val entries = ArrayList<Entry>()
-        val labels = listMonth.map { mesDto -> mesDto.name.substring(0,3) }
+        val labels = listMonth.map { mesDto -> mesDto.name.substring(0, 3) }
         loadListEntry(listValues, entries)
         val lineDataSet = LineDataSet(entries, "LineChart")
         val lineData = LineData(labels, lineDataSet)
@@ -191,13 +224,12 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
     }
 
     private fun loadLists(default: Int = 12) {
+        if(listMonth.isNotEmpty()) listMonth.clear()
         listMonth = DateFacilitator.getMonthsListToCurrentMonth(default)
         val list =
             AppDataBase(requireActivity()).electricityBillDao().getElectricityBillDtoAll(yearSelect)
                 .toTypedArray()
-        if (listValues.isNotEmpty())
-            listValues.clear()
-
+        if (listValues.isNotEmpty())listValues.clear()
         listValues.addAll(list)
     }
 
@@ -205,7 +237,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         val entries = ArrayList<BarEntry>()
         loadListBarEntry(listValues, entries)
         val barDataSet = BarDataSet(entries, "Cells")
-        val labels = listMonth.map { mesDto -> mesDto.name.substring(0,3) }
+        val labels = listMonth.map { mesDto -> mesDto.name.substring(0, 3) }
 
         val data = BarData(labels, barDataSet)
         barChart!!.data = data
@@ -244,7 +276,8 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
 
     private fun loadMonthInRecyclerView(recycle: RecyclerView?, position: Int) {
-        recycle!!.adapter = MonthAdapter(listMonth, this, mesDto!!.number)
+        recycle!!.adapter = MonthAdapter(listMonth, this, position)
+        Log.e("MONTH_LOAD",mesDto!!.number.toString() )
         val layoutManger = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
         recycle.layoutManager = layoutManger
         recycle.scrollToPosition(position)
@@ -252,15 +285,14 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
     override fun onClickMonth(month: MesDto) {
         mesDto = month
-        loadMonthInRecyclerView(recyclerView_months, mesDto!!.number - 1)
-        showDataInScreen(mesDto!!.number, yearSelect)
-        setIconFloatingButton()
+         showDataInScreen(mesDto!!.number, yearSelect)
+         setIconFloatingButton()
     }
 
     private fun setIconFloatingButton() {
-        if (!isSave()){
+        if (!isSave()) {
             floatingActionButtonAddOrUpdate.setImageResource(android.R.drawable.ic_menu_edit)
-        }else{
+        } else {
             floatingActionButtonAddOrUpdate.setImageResource(android.R.drawable.ic_input_add)
         }
     }

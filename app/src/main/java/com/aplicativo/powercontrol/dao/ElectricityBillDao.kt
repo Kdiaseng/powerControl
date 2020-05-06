@@ -13,6 +13,9 @@ interface ElectricityBillDao {
     @Query("SELECT * FROM electricity_bill WHERE month_number =:monthNumber AND year =:year ")
     fun getElectricityBillAllByMonthNumber(monthNumber: Int, year: Int): ElectricityBill
 
+    @Query("SELECT current_reading FROM electricity_bill WHERE month_number =:monthNumber AND year =:year")
+    fun getLastRead(monthNumber: Int, year: Int): Int?
+
     @Query("SELECT month_number, amount FROM electricity_bill WHERE year =:year")
     fun getElectricityBillDtoAll(year: Int): List<ElectricityBillDto>
 
