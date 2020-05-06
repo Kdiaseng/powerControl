@@ -29,5 +29,6 @@
     <string name="kilowatt_hour"> %d kWh</string>
     <string name="real"> %.2f R$</string>
     <string name="dateNull">00/00/000</string>
+    <string name="year">ano</string>
 
 </resources>
