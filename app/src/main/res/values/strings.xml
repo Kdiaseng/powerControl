@@ -23,7 +23,6 @@
     <string name="cadastrar">save</string>
     <string name="date_init">Data inicial</string>
     <string name="date_end">Data final</string>
-    <string name="register">CADASTRAR</string>
     <string name="amount">Valor Total</string>
 
     <string name="kilowatt_hour"> %d kWh</string>
@@ -31,5 +30,8 @@
     <string name="dateNull">00/00/000</string>
     <string name="year">ano</string>
     <string name="document">Document</string>
-
+    <string name="update">ATUALIZAR</string>
+    <string name="register">CADASTRAR</string>
+    <string name="register_sucess">CADASTRO FEITO COM SUCESSO!</string>
+    <string name="update_sucess">ATUALIZAÇÃO FEITA COM SUCESSO</string>
 </resources>

@@ -1,4 +1,6 @@
 package com.aplicativo.powercontrol.dto
 
-class MesDto(val number: Int, val name: String, val selected: Boolean? = false)
+import java.io.Serializable
+
+class MesDto(val number: Int, val name: String, val selected: Boolean? = false): Serializable
 
