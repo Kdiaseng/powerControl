@@ -1,8 +1,7 @@
 package com.aplicativo.powercontrol
 
 import android.os.Bundle
-import android.view.Window
-import android.view.WindowManager
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -26,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         navController = Navigation.findNavController(this, R.id.navHostFragment)
         NavigationUI.setupActionBarWithNavController(this, navController)
     }
+
 
     override fun onSupportNavigateUp(): Boolean {
         return NavigationUI.navigateUp(navController, null)

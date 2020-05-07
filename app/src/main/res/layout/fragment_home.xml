@@ -290,7 +290,7 @@
             android:layout_height="41dp"
             android:layout_gravity="bottom"
             app:backgroundTint="@color/paletteBlack"
-            app:fabAlignmentMode="end" />
+            app:fabAlignmentMode="center" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingActionButtonAddOrUpdate"

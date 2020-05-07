@@ -3,11 +3,10 @@ package com.aplicativo.powercontrol
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -26,6 +25,7 @@ import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.utils.ColorTemplate
 import kotlinx.android.synthetic.main.card_data.view.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_home.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -53,14 +53,31 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
+        bottom_app_bar.replaceMenu(R.menu.bottomappbar_menu)
+
+        bottom_app_bar.setOnMenuItemClickListener {
+            when (it.itemId){
+                R.id.app_bar_list_doc ->{
+                    Toast.makeText(activity, "teste1", Toast.LENGTH_SHORT).show()
+                    return@setOnMenuItemClickListener true
+                }
+                R.id.app_bar_view_doc -> {
+                    Toast.makeText(activity, "teste2", Toast.LENGTH_SHORT).show()
+                    return@setOnMenuItemClickListener true
+                }
+                else -> return@setOnMenuItemClickListener false
+            }
+        }
+
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         mesDto = getMesDtoCurrent()
         yearSelect = getCurrentYear()
 
@@ -74,10 +91,9 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         spinner_years.adapter = adapter
 
         loadLists(mesDto!!.number)
-
-        if ((activity as MainActivity).supportActionBar!!.isShowing) {
-            (activity as MainActivity).supportActionBar!!.hide()
-        }
+//        if ((activity as MainActivity).supportActionBar!!.isShowing) {
+//            (activity as MainActivity).supportActionBar!!.hide()
+//        }
 
         spinner_years.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             var count = 0
