@@ -177,6 +177,16 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <Button
+                    app:strokeColor="@color/colorGreenAccent"
+                    android:id="@+id/button_input_file"
+                    android:layout_width="match_parent"
+                    android:layout_height="58dp"
+                    android:text="@string/document"
+                    app:icon="@drawable/ic_description_black_24dp"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                    />
+
             </LinearLayout>
         </ScrollView>
 

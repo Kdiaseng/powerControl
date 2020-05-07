@@ -17,6 +17,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_homeFragment_to_documentListFragment"
+            app:destination="@id/documentListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/registerCountPowerFragment"
@@ -25,14 +32,14 @@
         tools:layout="@layout/fragment_register_count_power">
         <argument
             android:name="dateArgs"
+            android:defaultValue="@null"
             app:argType="com.aplicativo.powercontrol.dto.DateArgsDto"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
         <argument
             android:name="electricityBillArgs"
+            android:defaultValue="@null"
             app:argType="com.aplicativo.powercontrol.domain.ElectricityBill"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
         <action
             android:id="@+id/action_registerCountPowerFragment_to_homeFragment"
             app:destination="@id/homeFragment"
@@ -40,5 +47,24 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/documentListFragment"
+        android:name="com.aplicativo.powercontrol.DocumentListFragment"
+        android:label="fragment_document_list"
+        tools:layout="@layout/fragment_document_list">
+        <argument
+            android:name="years"
+            android:defaultValue="@null"
+            app:argType="integer[]"
+            app:nullable="true" />
+        <argument
+            android:name="yearSelected"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_documentListFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+          />
     </fragment>
 </navigation>

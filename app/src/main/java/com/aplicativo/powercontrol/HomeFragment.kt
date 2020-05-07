@@ -62,8 +62,11 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         bottom_app_bar.setOnMenuItemClickListener {
             when (it.itemId){
                 R.id.app_bar_list_doc ->{
-                    Toast.makeText(activity, "teste1", Toast.LENGTH_SHORT).show()
-                    return@setOnMenuItemClickListener true
+                    val action = HomeFragmentDirections.actionHomeFragmentToDocumentListFragment()
+                    action.years = years.toIntArray()
+                    action.yearSelected = yearSelect
+                    Navigation.findNavController(bottom_app_bar).navigate(action)
+                     return@setOnMenuItemClickListener true
                 }
                 R.id.app_bar_view_doc -> {
                     Toast.makeText(activity, "teste2", Toast.LENGTH_SHORT).show()
