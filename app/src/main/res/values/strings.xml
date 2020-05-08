@@ -35,4 +35,5 @@
     <string name="register_sucess">CADASTRO FEITO COM SUCESSO!</string>
     <string name="update_sucess">ATUALIZAÇÃO FEITA COM SUCESSO</string>
     <string name="add_document_alert">ANEXE UMA CONTA</string>
+    <string name="not_found">ARQUIVO NÃO ENCONTRADO</string>
 </resources>

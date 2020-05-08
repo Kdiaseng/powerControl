@@ -73,7 +73,7 @@ class RegisterCountPowerFragment : Fragment() {
         }
 
 
-        buttonSaveOrUpdate.setOnClickListener {
+        buttonSaveOrUpdate.setOnClickListener { it ->
             if (TxtLayout_read_last.visibility == View.VISIBLE
                 && validateFieldEmpty(textInput_read_last)
             )
@@ -99,6 +99,10 @@ class RegisterCountPowerFragment : Fragment() {
             electricityBill = buildElectricityBillObject()
             var message = getString(R.string.register_sucess)
             if (isSave) {
+                pathUri?.let { uri ->
+                    val name = FileFacilitator.getFileNameByUri(uri)
+                    FileFacilitator.saveDocumentInDirectory(uri, name!!)
+                }
                 saveCount(electricityBill!!)
                 if (TxtLayout_read_last.visibility == View.VISIBLE) {
                     saveDecember()

@@ -1,5 +1,6 @@
 package com.aplicativo.powercontrol
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -8,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -21,12 +22,15 @@ import com.aplicativo.powercontrol.dto.DateArgsDto
 import com.aplicativo.powercontrol.dto.ElectricityBillDto
 import com.aplicativo.powercontrol.dto.MesDto
 import com.aplicativo.powercontrol.utils.DateFacilitator
+import com.aplicativo.powercontrol.utils.FileFacilitator
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.utils.ColorTemplate
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.card_data.view.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -44,6 +48,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
     private var yearSelect: Int = 0
     private var years = ArrayList<Int>()
     private val JANUARY = 1
+    private val DECEMBER: Int = 12
 
 
     override fun onCreateView(
@@ -69,7 +74,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
                     return@setOnMenuItemClickListener true
                 }
                 R.id.app_bar_view_doc -> {
-                    Toast.makeText(activity, "teste2", Toast.LENGTH_SHORT).show()
+                    electricityBill?.pathDocument?.let { it1 -> openDocument(it1) }
                     return@setOnMenuItemClickListener true
                 }
                 else -> return@setOnMenuItemClickListener false
@@ -79,8 +84,38 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
     }
 
+
+    private fun openDocument(nameDocument: String) {
+        val file = File(nameDocument)
+        if (file.exists()) {
+            val uri = FileProvider.getUriForFile(
+                requireContext(),
+                requireContext().applicationContext.packageName + ".com.aplicativo.powercontrol.provider",
+                file
+            )
+            try {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.apply {
+                    setDataAndType(uri, "application/pdf")
+                    flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                }
+                startActivity(intent)
+            } catch (e: Exception) {
+                Log.e("HOME FRAGMENT", "ERROR: ${e.message}")
+            }
+        } else {
+            showMessageSneakBar(getString(R.string.not_found))
+        }
+    }
+
+    private fun showMessageSneakBar(message: String) {
+        Snackbar.make(bottom_app_bar, message, Snackbar.LENGTH_SHORT)
+            .show()
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        FileFacilitator.init(requireContext())
         mesDto = getMesDtoCurrent()
         yearSelect = getCurrentYear()
 
@@ -204,7 +239,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         var numberMonth = (mesDto!!.number - 1)
         var year = yearSelect
         if (mesDto!!.number == JANUARY) {
-            numberMonth = 12
+            numberMonth = DECEMBER
             year = yearSelect - 1
         }
         val last =
@@ -277,7 +312,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
     }
 
-    private fun loadLists(default: Int = 12) {
+    private fun loadLists(default: Int = DECEMBER) {
         if (listMonth.isNotEmpty()) listMonth.clear()
         listMonth = DateFacilitator.getMonthsListToCurrentMonth(default)
         val list =
@@ -286,7 +321,6 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         if (listValues.isNotEmpty()) listValues.clear()
         listValues.addAll(list)
     }
-
 
 
     private fun loadListBarEntry(
