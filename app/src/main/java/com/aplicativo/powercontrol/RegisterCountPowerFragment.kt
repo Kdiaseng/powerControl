@@ -3,8 +3,11 @@ package com.aplicativo.powercontrol
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
+import android.os.FileUtils
+import android.provider.OpenableColumns
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +20,7 @@ import com.aplicativo.powercontrol.domain.ElectricityBill
 import com.aplicativo.powercontrol.dto.DateArgsDto
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.fragment_register_count_power.*
-import java.io.File
+import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -28,7 +31,7 @@ class RegisterCountPowerFragment : Fragment() {
     private var dateArgsDto: DateArgsDto? = null
     private var electricityBill: ElectricityBill? = null
     private var isSave = false
-    private val JANUARY = 1
+    private val JANUARY: Int = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,12 +42,36 @@ class RegisterCountPowerFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 2 && resultCode == Activity.RESULT_OK){
+        if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
             data?.data?.also {
-                it.path
-                Log.e("RESULT", "Uri: ${it}")
-            }
+                dumpMetaData(it)
+                val saveDirectory = requireContext().getExternalFilesDir("application/accounts")
+                val input = requireContext().contentResolver!!.openInputStream(it)
+                val desFile = File(saveDirectory, "acount.pdf")
+                val out = FileOutputStream(desFile)
 
+                try {
+                    FileUtils.copy(input!!, out)
+                } catch (e: IOException) {
+
+                }
+            }
+        }
+    }
+
+
+    private fun dumpMetaData(uri: Uri) {
+        val contentResolver = requireContext().contentResolver
+        val cursor: Cursor? = contentResolver.query(
+            uri, null, null, null, null, null
+        )
+        cursor?.use {
+
+            if (it.moveToFirst()) {
+                val displayName: String =
+                    it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                button_input_file.text = displayName
+            }
         }
     }
 
@@ -71,32 +98,19 @@ class RegisterCountPowerFragment : Fragment() {
 
         button_input_file.setOnClickListener {
 
-            Log.e("DIR", requireContext().getExternalFilesDir("application/prin").toString())
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "application/pdf"
+            }
 
-//
-//            val documents = "documents/powerControl"
-//            val documentFolder = File(myDir, documents)
-//            documentFolder.mkdirs()
-
-//            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-//                // Filter to only show results that can be "opened", such as a
-//                // file (as opposed to a list of contacts or timezones)
-//                addCategory(Intent.CATEGORY_OPENABLE)
-//
-//                // Filter to show only images, using the image MIME data type.
-//                // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
-//                // To search for all documents available via installed storage providers,
-//                // it would be "*/*".
-//                type = "application/pdf"
-//            }
-//
-//            startActivityForResult(intent, 2)
+            startActivityForResult(intent, 2)
         }
 
 
         buttonSaveOrUpdate.setOnClickListener {
             if (TxtLayout_read_last.visibility == View.VISIBLE
-                && validateFieldEmpty(textInput_read_last))
+                && validateFieldEmpty(textInput_read_last)
+            )
                 return@setOnClickListener
 
             if (validateFieldEmpty(
@@ -114,7 +128,7 @@ class RegisterCountPowerFragment : Fragment() {
             var message = getString(R.string.register_sucess)
             if (isSave) {
                 saveCount(electricityBill!!)
-                if (TxtLayout_read_last.visibility == View.VISIBLE){
+                if (TxtLayout_read_last.visibility == View.VISIBLE) {
                     saveDecember()
                 }
             } else {
@@ -173,7 +187,8 @@ class RegisterCountPowerFragment : Fragment() {
     }
 
     private fun hasValueLastYear(date: DateArgsDto): Boolean {
-        val result = AppDataBase(requireActivity()).electricityBillDao().getElectricityBillDtoAll(date.year - 1)
+        val result = AppDataBase(requireActivity()).electricityBillDao()
+            .getElectricityBillDtoAll(date.year - 1)
         return result.isNotEmpty()
     }
 
