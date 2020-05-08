@@ -3,12 +3,7 @@ package com.aplicativo.powercontrol
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
-import android.database.Cursor
-import android.net.Uri
 import android.os.Bundle
-import android.os.FileUtils
-import android.provider.OpenableColumns
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,9 +13,9 @@ import androidx.navigation.Navigation
 import com.aplicativo.powercontrol.database.AppDataBase
 import com.aplicativo.powercontrol.domain.ElectricityBill
 import com.aplicativo.powercontrol.dto.DateArgsDto
+import com.aplicativo.powercontrol.utils.FileFacilitator
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.fragment_register_count_power.*
-import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -32,6 +27,7 @@ class RegisterCountPowerFragment : Fragment() {
     private var electricityBill: ElectricityBill? = null
     private var isSave = false
     private val JANUARY: Int = 1
+    private val REQUEST_CODE: Int = 2
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,58 +38,22 @@ class RegisterCountPowerFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             data?.data?.also {
-                dumpMetaData(it)
-                val saveDirectory = requireContext().getExternalFilesDir("application/accounts")
-                val input = requireContext().contentResolver!!.openInputStream(it)
-                val desFile = File(saveDirectory, "acount.pdf")
-                val out = FileOutputStream(desFile)
-
-                try {
-                    FileUtils.copy(input!!, out)
-                } catch (e: IOException) {
-
+                val filename = FileFacilitator.getFileNameByUri(requireContext(), it)
+                button_input_file.text = filename
+                if (filename != null) {
+                    FileFacilitator.saveDocumentInDirectory(requireContext(), it, filename)
                 }
             }
         }
     }
 
 
-    private fun dumpMetaData(uri: Uri) {
-        val contentResolver = requireContext().contentResolver
-        val cursor: Cursor? = contentResolver.query(
-            uri, null, null, null, null, null
-        )
-        cursor?.use {
-
-            if (it.moveToFirst()) {
-                val displayName: String =
-                    it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-                button_input_file.text = displayName
-            }
-        }
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         arguments?.let {
-            dateArgsDto =
-                RegisterCountPowerFragmentArgs.fromBundle(it).dateArgs
-            textView_month_selected.text =
-                getString(R.string.register_month_label, dateArgsDto!!.mesDto.name)
-            if (dateArgsDto!!.mesDto.number == JANUARY && !hasValueLastYear(dateArgsDto!!))
-                TxtLayout_read_last.visibility = View.VISIBLE
-
-            electricityBill = RegisterCountPowerFragmentArgs.fromBundle(it).electricityBillArgs
-            electricityBill?.let {
-                isSave = false
-                buttonSaveOrUpdate.text = getString(R.string.update)
-                loadDataToUpdate()
-            } ?: run {
-                buttonSaveOrUpdate.text = getString(R.string.register)
-                isSave = true
-            }
+            loadArguments(it)
         }
 
         button_input_file.setOnClickListener {
@@ -102,8 +62,7 @@ class RegisterCountPowerFragment : Fragment() {
                 addCategory(Intent.CATEGORY_OPENABLE)
                 type = "application/pdf"
             }
-
-            startActivityForResult(intent, 2)
+            startActivityForResult(intent, REQUEST_CODE)
         }
 
 
@@ -146,27 +105,42 @@ class RegisterCountPowerFragment : Fragment() {
         }
 
         TxtLayout_date_init.setEndIconOnClickListener {
-            DatePickerDialog(
-                this.requireContext(),
-                DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                    updateDate(year, month, dayOfMonth, textInput_date_init)
-                },
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-            ).show()
+            openDatePickerDialog(textInput_date_init)
         }
 
         TxtLayout_date_end.setEndIconOnClickListener {
-            DatePickerDialog(
-                this.requireContext(),
-                DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                    updateDate(year, month, dayOfMonth, textInput_date_end)
-                },
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-            ).show()
+            openDatePickerDialog(textInput_date_end)
+        }
+    }
+
+    private fun openDatePickerDialog(textInput: TextInputEditText) {
+        DatePickerDialog(
+            this.requireContext(),
+            DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+                updateDate(year, month, dayOfMonth, textInput)
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).show()
+    }
+
+    private fun loadArguments(it: Bundle) {
+        dateArgsDto =
+            RegisterCountPowerFragmentArgs.fromBundle(it).dateArgs
+        textView_month_selected.text =
+            getString(R.string.register_month_label, dateArgsDto!!.mesDto.name)
+        if (dateArgsDto!!.mesDto.number == JANUARY && !hasValueLastYear(dateArgsDto!!))
+            TxtLayout_read_last.visibility = View.VISIBLE
+
+        electricityBill = RegisterCountPowerFragmentArgs.fromBundle(it).electricityBillArgs
+        electricityBill?.let {
+            isSave = false
+            buttonSaveOrUpdate.text = getString(R.string.update)
+            loadDataToUpdate()
+        } ?: run {
+            buttonSaveOrUpdate.text = getString(R.string.register)
+            isSave = true
         }
     }
 

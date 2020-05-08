@@ -3,7 +3,9 @@ package com.aplicativo.powercontrol
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -25,7 +27,6 @@ import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.utils.ColorTemplate
 import kotlinx.android.synthetic.main.card_data.view.*
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_home.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -60,13 +61,13 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         bottom_app_bar.replaceMenu(R.menu.bottomappbar_menu)
 
         bottom_app_bar.setOnMenuItemClickListener {
-            when (it.itemId){
-                R.id.app_bar_list_doc ->{
+            when (it.itemId) {
+                R.id.app_bar_list_doc -> {
                     val action = HomeFragmentDirections.actionHomeFragmentToDocumentListFragment()
                     action.years = years.toIntArray()
                     action.yearSelected = yearSelect
                     Navigation.findNavController(bottom_app_bar).navigate(action)
-                     return@setOnMenuItemClickListener true
+                    return@setOnMenuItemClickListener true
                 }
                 R.id.app_bar_view_doc -> {
                     Toast.makeText(activity, "teste2", Toast.LENGTH_SHORT).show()
@@ -88,16 +89,13 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
             loadYears()
 
         showDataInScreen(mesDto!!.number, yearSelect)
+        setIconFloatingButton()
 
         val adapter =
             ArrayAdapter(requireContext(), R.layout.spinner_item, years)
         spinner_years.adapter = adapter
 
         loadLists(mesDto!!.number)
-//        if ((activity as MainActivity).supportActionBar!!.isShowing) {
-//            (activity as MainActivity).supportActionBar!!.hide()
-//        }
-
         spinner_years.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             var count = 0
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -112,6 +110,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
                 if (count >= 1) {
                     yearSelect = years[position]
                     showDataInScreen(mesDto!!.number, yearSelect)
+                    setIconFloatingButton()
                     if (yearSelect == getCurrentYear()) {
                         mesDto = getMesDtoCurrent()
                         loadLists(mesDto!!.number)
@@ -161,17 +160,20 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
             .getElectricityBillAllByMonthNumber(monthNumber, year)
 
         if (electricityBill != null) {
-            card_data_energy.textView_card_read_current.text =
-                getString(R.string.kilowatt_hour, electricityBill!!.currentReading)
-            card_data_energy.textView_card_measured_consumption.text =
-                getString(R.string.kilowatt_hour, electricityBill!!.measuredConsumption)
-            card_data_energy.textView_card_billed_consumption.text =
-                getString(R.string.kilowatt_hour, electricityBill!!.billedConsumption)
-            card_data_energy.textView_card_rate.text = electricityBill!!.rate.toString()
-            card_data_energy.textView_card_street_lighting.text =
-                getString(R.string.real, electricityBill!!.streetLighting)
-            textView_consumption_period_value.text = electricityBill!!.initDate
-            textView_consumption_period_value_end.text = electricityBill!!.endDate
+
+            electricityBill?.apply {
+                card_data_energy.textView_card_read_current.text =
+                    getString(R.string.kilowatt_hour, currentReading)
+                card_data_energy.textView_card_measured_consumption.text =
+                    getString(R.string.kilowatt_hour, measuredConsumption)
+                card_data_energy.textView_card_billed_consumption.text =
+                    getString(R.string.kilowatt_hour, billedConsumption)
+                card_data_energy.textView_card_rate.text = rate.toString()
+                card_data_energy.textView_card_street_lighting.text =
+                    getString(R.string.real, streetLighting)
+                textView_consumption_period_value.text = initDate
+                textView_consumption_period_value_end.text = endDate
+            }
             texView_amount.text = electricityBill!!.amount.toString()
             if (!validateCalculateAmount(electricityBill!!))
                 imageView_icon_validation.setImageResource(R.drawable.erroicon)
@@ -180,37 +182,39 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         } else {
             clearFields()
         }
-        card_data_energy.textView_card_read_last.text = getString(R.string.kilowatt_hour, getLastRead())
+        card_data_energy.textView_card_read_last.text =
+            getString(R.string.kilowatt_hour, getLastRead())
 
     }
 
-    private fun validateCalculateAmount(electricityBill: ElectricityBill): Boolean{
+    private fun validateCalculateAmount(electricityBill: ElectricityBill): Boolean {
         val consumption = electricityBill.billedConsumption
         val rate = electricityBill.rate
         val streetLighting = electricityBill.streetLighting
         val amountInput = electricityBill.amount
 
         val total = consumption * rate + streetLighting
-        if (total == amountInput )
+        if (total == amountInput)
             return true
 
         return false
     }
 
 
-   private fun getLastRead(): Int{
-       var numberMonth = (mesDto!!.number - 1)
-       var year = yearSelect
-       if (mesDto!!.number == JANUARY){
-           numberMonth = 12
-           year = yearSelect - 1
-       }
-       val last = AppDataBase(requireActivity()).electricityBillDao().getLastRead(numberMonth, year)
+    private fun getLastRead(): Int {
+        var numberMonth = (mesDto!!.number - 1)
+        var year = yearSelect
+        if (mesDto!!.number == JANUARY) {
+            numberMonth = 12
+            year = yearSelect - 1
+        }
+        val last =
+            AppDataBase(requireActivity()).electricityBillDao().getLastRead(numberMonth, year)
         last?.let {
             return it
         }
-       return 0
-   }
+        return 0
+    }
 
     private fun clearFields() {
         card_data_energy.textView_card_read_current.text = getString(R.string.kilowatt_hour, 0)
@@ -230,45 +234,61 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         val entries = ArrayList<Entry>()
         val labels = listMonth.map { mesDto -> mesDto.name.substring(0, 3) }
         loadListEntry(listValues, entries)
-        val lineDataSet = LineDataSet(entries, "LineChart")
-        val lineData = LineData(labels, lineDataSet)
-        lineChart!!.data = lineData
-        lineChart.axisLeft.textColor = Color.WHITE
-        lineChart.axisRight.textColor = Color.WHITE
-        lineDataSet.color = Color.GREEN
-        lineDataSet.valueTextColor = Color.WHITE
-        lineDataSet.setCircleColor(Color.GREEN)
-        lineChart.xAxis.textColor = Color.WHITE
-        lineChart.animateX(5000)
-    }
 
-    private fun loadLists(default: Int = 12) {
-        if(listMonth.isNotEmpty()) listMonth.clear()
-        listMonth = DateFacilitator.getMonthsListToCurrentMonth(default)
-        val list =
-            AppDataBase(requireActivity()).electricityBillDao().getElectricityBillDtoAll(yearSelect)
-                .toTypedArray()
-        if (listValues.isNotEmpty())listValues.clear()
-        listValues.addAll(list)
+        val lineDataSet = LineDataSet(entries, "LineChart")
+        lineDataSet.apply {
+            color = Color.GREEN
+            valueTextColor = Color.WHITE
+            setCircleColor(Color.GREEN)
+        }
+
+        val lineData = LineData(labels, lineDataSet)
+
+        lineChart?.apply {
+            data = lineData
+            axisLeft.textColor = Color.WHITE
+            axisRight.textColor = Color.WHITE
+            xAxis.textColor = Color.WHITE
+            animateX(5000)
+        }
     }
 
     private fun plotBarChart(barChart: BarChart?) {
         val entries = ArrayList<BarEntry>()
         loadListBarEntry(listValues, entries)
+
         val barDataSet = BarDataSet(entries, "Cells")
+        barDataSet.apply {
+            setColors(ColorTemplate.COLORFUL_COLORS)
+            valueTextColor = Color.WHITE
+        }
+
         val labels = listMonth.map { mesDto -> mesDto.name.substring(0, 3) }
 
-        val data = BarData(labels, barDataSet)
-        barChart!!.data = data
-        barChart.setDescription("Conta até o mês atual")
-        barDataSet.setColors(ColorTemplate.COLORFUL_COLORS)
-        barChart.axisRight.textColor = Color.WHITE
-        barChart.axisLeft.textColor = Color.WHITE
-        barChart.xAxis.textColor = Color.WHITE
-        barDataSet.valueTextColor = Color.WHITE
-        barChart.animateY(5000)
+        val dataBar = BarData(labels, barDataSet)
+
+        barChart?.apply {
+            data = dataBar
+            setDescription("Conta até o mês atual")
+            axisRight.textColor = Color.WHITE
+            axisLeft.textColor = Color.WHITE
+            xAxis.textColor = Color.WHITE
+            animateY(5000)
+        }
 
     }
+
+    private fun loadLists(default: Int = 12) {
+        if (listMonth.isNotEmpty()) listMonth.clear()
+        listMonth = DateFacilitator.getMonthsListToCurrentMonth(default)
+        val list =
+            AppDataBase(requireActivity()).electricityBillDao().getElectricityBillDtoAll(yearSelect)
+                .toTypedArray()
+        if (listValues.isNotEmpty()) listValues.clear()
+        listValues.addAll(list)
+    }
+
+
 
     private fun loadListBarEntry(
         listValues: List<ElectricityBillDto>,
@@ -296,7 +316,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
     private fun loadMonthInRecyclerView(recycle: RecyclerView?, position: Int) {
         recycle!!.adapter = MonthAdapter(listMonth, this, position)
-        Log.e("MONTH_LOAD",mesDto!!.number.toString() )
+        Log.e("MONTH_LOAD", mesDto!!.number.toString())
         val layoutManger = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
         recycle.layoutManager = layoutManger
         recycle.scrollToPosition(position)
@@ -304,8 +324,8 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
     override fun onClickMonth(month: MesDto) {
         mesDto = month
-         showDataInScreen(mesDto!!.number, yearSelect)
-         setIconFloatingButton()
+        showDataInScreen(mesDto!!.number, yearSelect)
+        setIconFloatingButton()
     }
 
     private fun setIconFloatingButton() {
