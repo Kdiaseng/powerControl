@@ -17,7 +17,7 @@ data class ElectricityBill(
     val currentReading: Int,
 
     @ColumnInfo(name = "measured_consumption")
-    val measuredConsumption : Int,
+    val measuredConsumption: Int,
 
     @ColumnInfo(name = "billed_consumption")
     val billedConsumption: Int,
@@ -32,10 +32,13 @@ data class ElectricityBill(
     val initDate: String,
 
     @ColumnInfo(name = "end_date")
-    val endDate: String
+    val endDate: String,
+
+    @ColumnInfo(name = "path_document")
+    val pathDocument: String
 
 
-): Serializable{
+    ) : Serializable {
     @PrimaryKey(autoGenerate = true)
-    var id :Long = 0
+    var id: Long = 0
 }

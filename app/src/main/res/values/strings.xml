@@ -29,9 +29,10 @@
     <string name="real"> %.2f R$</string>
     <string name="dateNull">00/00/000</string>
     <string name="year">ano</string>
-    <string name="document">Document</string>
+    <string name="document">Documento</string>
     <string name="update">ATUALIZAR</string>
     <string name="register">CADASTRAR</string>
     <string name="register_sucess">CADASTRO FEITO COM SUCESSO!</string>
     <string name="update_sucess">ATUALIZAÇÃO FEITA COM SUCESSO</string>
+    <string name="add_document_alert">ANEXE UMA CONTA</string>
 </resources>

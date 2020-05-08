@@ -3,6 +3,7 @@ package com.aplicativo.powercontrol
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import com.aplicativo.powercontrol.database.AppDataBase
 import com.aplicativo.powercontrol.domain.ElectricityBill
 import com.aplicativo.powercontrol.dto.DateArgsDto
 import com.aplicativo.powercontrol.utils.FileFacilitator
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.fragment_register_count_power.*
 import java.text.SimpleDateFormat
@@ -25,6 +27,7 @@ class RegisterCountPowerFragment : Fragment() {
     private val calendar = Calendar.getInstance()
     private var dateArgsDto: DateArgsDto? = null
     private var electricityBill: ElectricityBill? = null
+    private var pathUri: Uri? = null
     private var isSave = false
     private val JANUARY: Int = 1
     private val REQUEST_CODE: Int = 2
@@ -40,10 +43,10 @@ class RegisterCountPowerFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             data?.data?.also {
-                val filename = FileFacilitator.getFileNameByUri(requireContext(), it)
-                button_input_file.text = filename
+                pathUri = it
+                val filename = FileFacilitator.getFileNameByUri(it)
                 if (filename != null) {
-                    FileFacilitator.saveDocumentInDirectory(requireContext(), it, filename)
+                    button_input_file.text = filename
                 }
             }
         }
@@ -51,11 +54,11 @@ class RegisterCountPowerFragment : Fragment() {
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
+        FileFacilitator.init(requireContext())
         super.onActivityCreated(savedInstanceState)
         arguments?.let {
             loadArguments(it)
         }
-
         button_input_file.setOnClickListener {
 
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
@@ -63,6 +66,10 @@ class RegisterCountPowerFragment : Fragment() {
                 type = "application/pdf"
             }
             startActivityForResult(intent, REQUEST_CODE)
+        }
+
+        fun hasDocument(): Boolean{
+            return  pathUri != null
         }
 
 
@@ -82,6 +89,12 @@ class RegisterCountPowerFragment : Fragment() {
                     textInput_date_end
                 )
             ) return@setOnClickListener
+
+            if (!hasDocument()){
+                Snackbar.make(it, getString(R.string.add_document_alert), Snackbar.LENGTH_SHORT)
+                    .show()
+                return@setOnClickListener
+            }
 
             electricityBill = buildElectricityBillObject()
             var message = getString(R.string.register_sucess)
@@ -144,6 +157,7 @@ class RegisterCountPowerFragment : Fragment() {
         }
     }
 
+
     private fun saveDecember() {
         val billDecember = ElectricityBill(
             dateArgsDto!!.year - 1,
@@ -155,9 +169,18 @@ class RegisterCountPowerFragment : Fragment() {
             0.0,
             0.0,
             "00/00/000",
-            "00/00/000"
+            "00/00/000",
+            ""
         )
         saveCount(billDecember)
+    }
+
+    private fun getPathDocument(): String? {
+        return FileFacilitator.directoryDefault?.path + "/"+ pathUri?.let {
+            FileFacilitator.getFileNameByUri(
+                it
+            )
+        }
     }
 
     private fun hasValueLastYear(date: DateArgsDto): Boolean {
@@ -207,6 +230,7 @@ class RegisterCountPowerFragment : Fragment() {
     }
 
     private fun buildElectricityBillObject(): ElectricityBill? {
+        val pathDocument = getPathDocument()
         val electricityBillNew = ElectricityBill(
             dateArgsDto!!.year,
             dateArgsDto!!.mesDto.number,
@@ -217,7 +241,8 @@ class RegisterCountPowerFragment : Fragment() {
             textInput_rate.text.toString().toDouble(),
             textInput_amount.text.toString().toDouble(),
             textInput_date_init.text.toString(),
-            textInput_date_end.text.toString()
+            textInput_date_end.text.toString(),
+            pathDocument!!
         )
         if (!isSave) {
             electricityBillNew.id = electricityBill!!.id

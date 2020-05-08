@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.aplicativo.powercontrol.dao.ElectricityBillDao
 import com.aplicativo.powercontrol.domain.ElectricityBill
 
-@Database(entities = [ElectricityBill::class], version = 1, exportSchema = false)
+@Database(entities = [ElectricityBill::class], version = 2, exportSchema = false)
 abstract class AppDataBase : RoomDatabase() {
     abstract fun electricityBillDao(): ElectricityBillDao
 

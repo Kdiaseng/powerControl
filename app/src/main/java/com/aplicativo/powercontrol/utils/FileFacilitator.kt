@@ -13,13 +13,18 @@ import java.io.IOException
 object FileFacilitator {
 
     private const val TAG = "FILE FACILITATOR"
-    private var directoryDefault: File? = null
+    var directoryDefault: File? = null
+    var contextFile: Context? =null
 
-    fun saveDocumentInDirectory(context: Context, uri: Uri, fileName: String): Boolean {
+    fun init(context: Context){
+        contextFile = context
         //take the destination directory
-        directoryDefault = context.getExternalFilesDir("application/accounts")
+        directoryDefault = contextFile?.getExternalFilesDir("application/accounts")
+    }
+
+    fun saveDocumentInDirectory( uri: Uri, fileName: String): Boolean {
         //take the contents of the uri
-        val input = context.contentResolver!!.openInputStream(uri)
+        val input = contextFile?.contentResolver!!.openInputStream(uri)
         //creates a new file
         val newFile = File(directoryDefault, fileName)
         val fileOutputStream = FileOutputStream(newFile)
@@ -39,9 +44,9 @@ object FileFacilitator {
         return false
     }
 
-    fun getFileNameByUri(context: Context, uri: Uri): String? {
-        val contentResolver = context.contentResolver
-        val cursor: Cursor? = contentResolver.query(
+    fun getFileNameByUri(uri: Uri): String? {
+        val contentResolver = contextFile?.contentResolver
+        val cursor: Cursor? = contentResolver?.query(
             uri, null, null, null, null, null
         )
         cursor?.use {
@@ -51,5 +56,4 @@ object FileFacilitator {
         }
         return null
     }
-
 }
