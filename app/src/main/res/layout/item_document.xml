@@ -2,16 +2,19 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <com.google.android.material.card.MaterialCardView
+       android:id="@+id/materialCard_item_docs"
         app:cardBackgroundColor="@color/palette1BlackLight"
         android:layout_width="65dp"
         app:cardCornerRadius="5dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:checkable="true"
         app:strokeWidth="1dp"
-        app:strokeColor="@color/colorGreenAccent"
+        app:strokeColor="@color/stroke_color"
         android:layout_height="85dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
@@ -25,17 +28,20 @@
 
             <ImageView
                 android:layout_marginTop="5dp"
+                android:layout_marginBottom="3dp"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:src="@drawable/iconpdf" />
 
             <TextView
-                android:textColor="@color/colorGreenAccent"
-                android:layout_gravity="center"
+                android:id="@+id/textView_document_month"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="@font/archivo_black"
                 android:text="@string/year"
-                android:textSize="20sp" />
+                android:textColor="@color/colorGreenAccent"
+                android:textSize="18sp" />
 
         </LinearLayout>
 

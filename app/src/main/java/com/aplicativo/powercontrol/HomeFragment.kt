@@ -349,7 +349,6 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
     private fun loadMonthInRecyclerView(recycle: RecyclerView?, position: Int) {
         recycle!!.adapter = MonthAdapter(listMonth, this, position)
-        Log.e("MONTH_LOAD", mesDto!!.number.toString())
         val layoutManger = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
         recycle.layoutManager = layoutManger
         recycle.scrollToPosition(position)

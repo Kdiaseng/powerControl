@@ -11,10 +11,10 @@ import com.aplicativo.powercontrol.dto.MesDto
 import kotlinx.android.synthetic.main.item_month.view.*
 
 class MonthAdapter(
-    private val months: List<MesDto>, var itemClickListener: OnMonthListener, selected: Int
+    private val months: List<MesDto>, private var itemClickListener: OnMonthListener, selected: Int
 ) :
     RecyclerView.Adapter<ViewHolder>() {
-    var index = selected
+    private var index = selected
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 //        fun bindView(month: MesDto, action: OnMonthListener, monthSelected: Int) {
 //            itemView.button_month_item.text = month.name

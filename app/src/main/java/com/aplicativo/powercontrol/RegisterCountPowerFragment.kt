@@ -90,11 +90,11 @@ class RegisterCountPowerFragment : Fragment() {
                 )
             ) return@setOnClickListener
 
-            if (!hasDocument()){
-                Snackbar.make(it, getString(R.string.add_document_alert), Snackbar.LENGTH_SHORT)
-                    .show()
-                return@setOnClickListener
-            }
+//            if (!hasDocument()){
+//                Snackbar.make(it, getString(R.string.add_document_alert), Snackbar.LENGTH_SHORT)
+//                    .show()
+//                return@setOnClickListener
+//            }
 
             electricityBill = buildElectricityBillObject()
             var message = getString(R.string.register_sucess)
