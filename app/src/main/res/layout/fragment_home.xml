@@ -287,7 +287,7 @@
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottom_app_bar"
             android:layout_width="match_parent"
-            android:layout_height="41dp"
+            android:layout_height="45dp"
             android:layout_gravity="bottom"
             app:backgroundTint="@color/paletteBlack"
             app:fabAlignmentMode="center" />

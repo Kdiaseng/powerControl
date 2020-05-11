@@ -31,6 +31,7 @@ class RegisterCountPowerFragment : Fragment() {
     private var isSave = false
     private val JANUARY: Int = 1
     private val REQUEST_CODE: Int = 2
+    private val URL_AMAZONAS_ENERGIA = "https://www.amazonasenergia.com/agenciavirtual/via-pagamento"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,11 +46,22 @@ class RegisterCountPowerFragment : Fragment() {
             data?.data?.also {
                 pathUri = it
                 val filename = FileFacilitator.getFileNameByUri(it)
-                if (filename != null) {
-                    button_input_file.text = filename
-                }
+                materialCard_select_document.isChecked = if (filename != null) {
+                    textView_selected_document.text = filename
+                    true
+                } else
+                    false
             }
         }
+    }
+
+    fun openBrowser(url: String){
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
+    }
+
+    private fun hasDocument(): Boolean {
+        return pathUri != null
     }
 
 
@@ -59,8 +71,7 @@ class RegisterCountPowerFragment : Fragment() {
         arguments?.let {
             loadArguments(it)
         }
-        button_input_file.setOnClickListener {
-
+        materialCard_select_document.setOnClickListener {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
                 type = "application/pdf"
@@ -68,8 +79,8 @@ class RegisterCountPowerFragment : Fragment() {
             startActivityForResult(intent, REQUEST_CODE)
         }
 
-        fun hasDocument(): Boolean{
-            return  pathUri != null
+        materialCard_download_document.setOnClickListener {
+            openBrowser(URL_AMAZONAS_ENERGIA)
         }
 
 
@@ -90,11 +101,11 @@ class RegisterCountPowerFragment : Fragment() {
                 )
             ) return@setOnClickListener
 
-//            if (!hasDocument()){
-//                Snackbar.make(it, getString(R.string.add_document_alert), Snackbar.LENGTH_SHORT)
-//                    .show()
-//                return@setOnClickListener
-//            }
+            if (!hasDocument()){
+                Snackbar.make(it, getString(R.string.add_document_alert), Snackbar.LENGTH_SHORT)
+                    .show()
+                return@setOnClickListener
+            }
 
             electricityBill = buildElectricityBillObject()
             var message = getString(R.string.register_sucess)
@@ -180,7 +191,7 @@ class RegisterCountPowerFragment : Fragment() {
     }
 
     private fun getPathDocument(): String? {
-        return FileFacilitator.directoryDefault?.path + "/"+ pathUri?.let {
+        return FileFacilitator.directoryDefault?.path + "/" + pathUri?.let {
             FileFacilitator.getFileNameByUri(
                 it
             )

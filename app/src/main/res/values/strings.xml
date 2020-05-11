@@ -37,4 +37,5 @@
     <string name="add_document_alert">ANEXE UMA CONTA</string>
     <string name="not_found">ARQUIVO NÃO ENCONTRADO</string>
     <string name="choose">Escolha a conta que deseja visualizar</string>
+    <string name="download_file">Baixar Arquivo</string>
 </resources>
