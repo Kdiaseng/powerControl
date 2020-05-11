@@ -16,7 +16,7 @@ interface ElectricityBillDao {
     @Query("SELECT current_reading FROM electricity_bill WHERE month_number =:monthNumber AND year =:year")
     fun getLastRead(monthNumber: Int, year: Int): Int?
 
-    @Query("SELECT month_number, amount, path_document FROM electricity_bill WHERE year =:year")
+    @Query("SELECT month_number, amount, path_document FROM electricity_bill WHERE year =:year ORDER BY month_number")
     fun getElectricityBillDtoAll(year: Int): List<ElectricityBillDto>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

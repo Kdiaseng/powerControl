@@ -10,7 +10,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/outlinedTextField"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="174dp"
+        android:layout_width="130dp"
         android:layout_height="66dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
@@ -18,6 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <AutoCompleteTextView
+            android:enabled="false"
             android:id="@+id/autoComplete_year"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,27 +37,39 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <androidx.cardview.widget.CardView
-        app:cardBackgroundColor="@color/palette1BlackLight"
-        android:layout_width="0dp"
-        app:cardCornerRadius="10dp"
-        app:strokeWidth="1dp"
-        app:strokeColor="@color/colorGreenAccent"
-        android:layout_height="550dp"
-        android:layout_marginStart="24dp"
+    <TextView
+        android:id="@+id/textView_docs"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
+        android:fontFamily="@font/alfa_slab_one"
+        android:text="@string/choose"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/outlinedTextField" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="355dp"
+        android:layout_height="512dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
+        app:cardBackgroundColor="@color/palette1BlackLight"
+        app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/outlinedTextField">
+        app:layout_constraintTop_toBottomOf="@+id/textView_docs"
+        app:strokeColor="@color/colorGreenAccent"
+        app:strokeWidth="1dp">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginStart="30dp"
-            android:layout_gravity="center_horizontal"
-            tools:listitem="@layout/item_document"
             android:id="@+id/recyclerView_docs"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="30dp"
+            tools:listitem="@layout/item_document" />
 
 
     </androidx.cardview.widget.CardView>

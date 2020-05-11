@@ -32,7 +32,7 @@
     <color name="palette2RedLight">#c72c41</color>
     <color name="palette2Red">#ee4540</color>
 
-    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#3c8d2f</color>
+<!--    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#3c8d2f</color>-->
 
 
 </resources>

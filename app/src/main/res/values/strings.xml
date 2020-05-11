@@ -28,7 +28,7 @@
     <string name="kilowatt_hour"> %d kWh</string>
     <string name="real"> %.2f R$</string>
     <string name="dateNull">00/00/000</string>
-    <string name="year">ano</string>
+    <string name="year">ANO</string>
     <string name="document">Documento</string>
     <string name="update">ATUALIZAR</string>
     <string name="register">CADASTRAR</string>
@@ -36,4 +36,5 @@
     <string name="update_sucess">ATUALIZAÇÃO FEITA COM SUCESSO</string>
     <string name="add_document_alert">ANEXE UMA CONTA</string>
     <string name="not_found">ARQUIVO NÃO ENCONTRADO</string>
+    <string name="choose">Escolha a conta que deseja visualizar</string>
 </resources>

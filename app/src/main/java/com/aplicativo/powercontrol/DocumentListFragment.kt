@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.aplicativo.powercontrol.adapter.DocumentAdapter
@@ -22,14 +23,32 @@ class DocumentListFragment : Fragment(), DocumentAdapter.OnDocumentListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_document_list, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val documents = getDocuments()
-        loadListDocuments(documents)
+
+        arguments?.let {
+            val yearSelected = DocumentListFragmentArgs.fromBundle(it).yearSelected
+            val documents = getDocuments(yearSelected)
+            val years = DocumentListFragmentArgs.fromBundle(it).years
+            val adapter = ArrayAdapter(requireContext(), R.layout.list_item_year, years!!.toList())
+            loadDropdown(adapter, yearSelected)
+            loadListDocuments(documents)
+        }
+    }
+
+    private fun loadDropdown(
+        adapter: ArrayAdapter<Int>,
+        yearSelected: Int
+    ) {
+        autoComplete_year.setAdapter(adapter)
+        autoComplete_year.setText(yearSelected.toString(), false)
+        autoComplete_year.setOnItemClickListener { parent, _, position, _ ->
+            val documents = getDocuments(parent.getItemAtPosition(position) as Int)
+            loadListDocuments(documents)
+        }
     }
 
     private fun loadListDocuments(documents: ArrayList<ElectricityBillDto>) {
@@ -43,9 +62,9 @@ class DocumentListFragment : Fragment(), DocumentAdapter.OnDocumentListener {
     }
 
 
-    private fun getDocuments(): ArrayList<ElectricityBillDto> {
+    private fun getDocuments(yearSelected: Int): ArrayList<ElectricityBillDto> {
         val list =
-            AppDataBase(requireActivity()).electricityBillDao().getElectricityBillDtoAll(2020)
+            AppDataBase(requireActivity()).electricityBillDao().getElectricityBillDtoAll(yearSelected)
         return ArrayList(list)
 
     }
