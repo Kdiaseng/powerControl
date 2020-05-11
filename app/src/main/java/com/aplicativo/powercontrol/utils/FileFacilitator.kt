@@ -1,11 +1,14 @@
 package com.aplicativo.powercontrol.utils
 
 import android.content.Context
+import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
 import android.os.FileUtils
 import android.provider.OpenableColumns
 import android.util.Log
+import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.FileProvider
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -55,5 +58,31 @@ object FileFacilitator {
             }
         }
         return null
+    }
+
+    fun openDocument(pathDocument: String): Boolean{
+        val file = File(pathDocument)
+        if (file.exists()) {
+            val uri = contextFile?.let {
+                FileProvider.getUriForFile(
+                    it,
+                    contextFile!!.applicationContext.packageName + ".com.aplicativo.powercontrol.provider",
+                    file
+                )
+            }
+            return try {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.apply {
+                    setDataAndType(uri, "application/pdf")
+                    flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                }
+                contextFile?.startActivity(intent)
+                true
+            } catch (e: Exception) {
+                Log.e("HOME FRAGMENT", "ERROR: ${e.message}")
+                false
+            }
+        }
+        return false
     }
 }

@@ -74,39 +74,17 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
                     return@setOnMenuItemClickListener true
                 }
                 R.id.app_bar_view_doc -> {
-                    electricityBill?.pathDocument?.let { it1 -> openDocument(it1) }
+                    electricityBill?.pathDocument?.let { path ->
+                        if (!FileFacilitator.openDocument(path))
+                            showMessageSneakBar(getString(R.string.not_found))
+                    }
                     return@setOnMenuItemClickListener true
                 }
                 else -> return@setOnMenuItemClickListener false
             }
         }
-
-
     }
 
-
-    private fun openDocument(nameDocument: String) {
-        val file = File(nameDocument)
-        if (file.exists()) {
-            val uri = FileProvider.getUriForFile(
-                requireContext(),
-                requireContext().applicationContext.packageName + ".com.aplicativo.powercontrol.provider",
-                file
-            )
-            try {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.apply {
-                    setDataAndType(uri, "application/pdf")
-                    flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                }
-                startActivity(intent)
-            } catch (e: Exception) {
-                Log.e("HOME FRAGMENT", "ERROR: ${e.message}")
-            }
-        } else {
-            showMessageSneakBar(getString(R.string.not_found))
-        }
-    }
 
     private fun showMessageSneakBar(message: String) {
         Snackbar.make(bottom_app_bar, message, Snackbar.LENGTH_SHORT)
@@ -226,12 +204,8 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         val rate = electricityBill.rate
         val streetLighting = electricityBill.streetLighting
         val amountInput = electricityBill.amount
-
         val total = consumption * rate + streetLighting
-        if (total == amountInput)
-            return true
-
-        return false
+        return total == amountInput
     }
 
 

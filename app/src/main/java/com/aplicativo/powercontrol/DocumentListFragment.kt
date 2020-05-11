@@ -12,7 +12,10 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.aplicativo.powercontrol.adapter.DocumentAdapter
 import com.aplicativo.powercontrol.database.AppDataBase
 import com.aplicativo.powercontrol.dto.ElectricityBillDto
+import com.aplicativo.powercontrol.utils.FileFacilitator
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_document_list.*
+import kotlinx.android.synthetic.main.fragment_home.*
 
 /**
  * A simple [Fragment] subclass.
@@ -28,6 +31,8 @@ class DocumentListFragment : Fragment(), DocumentAdapter.OnDocumentListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        FileFacilitator.init(requireContext())
 
         arguments?.let {
             val yearSelected = DocumentListFragmentArgs.fromBundle(it).yearSelected
@@ -58,9 +63,10 @@ class DocumentListFragment : Fragment(), DocumentAdapter.OnDocumentListener {
     }
 
     override fun onClickDocument(document: ElectricityBillDto) {
-        Log.e("CLICK", "lalalalal")
+        if(!FileFacilitator.openDocument(document.pathDocument))
+            Snackbar.make(recyclerView_docs,getString(R.string.not_found), Snackbar.LENGTH_SHORT)
+                .show()
     }
-
 
     private fun getDocuments(yearSelected: Int): ArrayList<ElectricityBillDto> {
         val list =

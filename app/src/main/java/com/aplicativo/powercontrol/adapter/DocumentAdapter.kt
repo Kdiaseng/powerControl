@@ -39,9 +39,9 @@ class DocumentAdapter(
 
         card.setOnClickListener {
             index = position
+            itemClickListener.onClickDocument(document)
             notifyDataSetChanged()
         }
-
         card.isChecked = index == position
 
 
