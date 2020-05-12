@@ -144,6 +144,7 @@
                     app:endIconTint="@color/colorGreenAccent">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:enabled="false"
                         android:id="@+id/textInput_date_init"
                         style="@style/StyleEditText"
                         android:inputType="date" />
@@ -159,6 +160,7 @@
                     app:endIconTint="@color/colorGreenAccent">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:enabled="false"
                         android:id="@+id/textInput_date_end"
                         style="@style/StyleEditText"
                         android:inputType="date" />
