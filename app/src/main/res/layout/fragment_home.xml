@@ -63,8 +63,11 @@
                 tools:ignore="UselessParent">
 
                 <Spinner
+                    android:dropDownVerticalOffset="?attr/dropdownListPreferredItemHeight"
+                    android:popupElevation="3dp"
                     android:id="@+id/spinner_years"
                     android:layout_width="115dp"
+                    android:dropDownWidth="115dp"
                     android:layout_height="match_parent"
                     android:backgroundTint="@color/colorGreenAccent"
                     android:spinnerMode="dropdown"

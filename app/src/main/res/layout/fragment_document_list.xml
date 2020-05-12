@@ -18,6 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <AutoCompleteTextView
+            android:textColor="@color/palette1Black"
             android:enabled="false"
             android:id="@+id/autoComplete_year"
             android:layout_width="match_parent"
@@ -65,13 +66,14 @@
         app:strokeColor="@color/colorGreenAccent"
         app:strokeWidth="1dp">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView_docs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginStart="30dp"
-            tools:listitem="@layout/item_document" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_docs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/item_document" />
+
+
 
 
     </androidx.cardview.widget.CardView>
