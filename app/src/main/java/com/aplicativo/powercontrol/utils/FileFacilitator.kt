@@ -7,25 +7,28 @@ import android.net.Uri
 import android.os.FileUtils
 import android.provider.OpenableColumns
 import android.util.Log
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 object FileFacilitator {
 
     private const val TAG = "FILE FACILITATOR"
     var directoryDefault: File? = null
-    var contextFile: Context? =null
+    var contextFile: Context? = null
 
-    fun init(context: Context){
+    fun init(context: Context) {
         contextFile = context
         //take the destination directory
         directoryDefault = contextFile?.getExternalFilesDir("application/accounts")
     }
 
-    fun saveDocumentInDirectory( uri: Uri, fileName: String): Boolean {
+    fun saveDocumentInDirectory(uri: Uri): Boolean {
+        val fileName = "account" + SimpleDateFormat("ddMMyyyy_HHmmss",
+            Locale("pr", "BR")).format(Date()) + ".pdf"
         //take the contents of the uri
         val input = contextFile?.contentResolver!!.openInputStream(uri)
         //creates a new file
@@ -60,7 +63,7 @@ object FileFacilitator {
         return null
     }
 
-    fun openDocument(pathDocument: String): Boolean{
+    fun openDocument(pathDocument: String): Boolean {
         val file = File(pathDocument)
         if (file.exists()) {
             val uri = contextFile?.let {
@@ -85,4 +88,18 @@ object FileFacilitator {
         }
         return false
     }
+
+    fun deleteFile(path: String): Boolean {
+        val file = File(path)
+        if (file.exists()) {
+            file.delete()
+            return true
+        }
+        return false
+    }
+
+    fun getNameFileByPath(path: String): String {
+        return path.substring(path.lastIndexOf("/") + 1)
+    }
+
 }

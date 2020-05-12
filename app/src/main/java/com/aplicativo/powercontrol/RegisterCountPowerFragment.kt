@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.aplicativo.powercontrol.database.AppDataBase
@@ -33,9 +32,10 @@ class RegisterCountPowerFragment : Fragment() {
     private var isSave = false
     private val JANUARY: Int = 1
     private val REQUEST_CODE: Int = 2
-    private val URL_AMAZONAS_ENERGIA = "https://www.amazonasenergia.com/agenciavirtual/via-pagamento"
+    private val URL_AMAZONAS_ENERGIA =
+        "https://www.amazonasenergia.com/agenciavirtual/via-pagamento"
 
-    private var lastPath = ""
+    private var lastNameFile = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,7 +59,7 @@ class RegisterCountPowerFragment : Fragment() {
         }
     }
 
-    private fun openBrowser(url: String){
+    private fun openBrowser(url: String) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(intent)
     }
@@ -89,7 +89,12 @@ class RegisterCountPowerFragment : Fragment() {
 
         val mLocale = Locale("pt", "BR")
         textInput_amount.addTextChangedListener(MoneyTextWatcher(textInput_amount, mLocale))
-        textInput_street_lighting.addTextChangedListener(MoneyTextWatcher(textInput_street_lighting, mLocale))
+        textInput_street_lighting.addTextChangedListener(
+            MoneyTextWatcher(
+                textInput_street_lighting,
+                mLocale
+            )
+        )
 
         buttonSaveOrUpdate.setOnClickListener { it ->
             if (TxtLayout_read_last.visibility == View.VISIBLE
@@ -109,7 +114,7 @@ class RegisterCountPowerFragment : Fragment() {
                 )
             ) return@setOnClickListener
 
-            if (!hasDocument()){
+            if (!hasDocument()) {
                 Snackbar.make(it, getString(R.string.add_document_alert), Snackbar.LENGTH_SHORT)
                     .show()
                 return@setOnClickListener
@@ -117,17 +122,13 @@ class RegisterCountPowerFragment : Fragment() {
 
             electricityBill = buildElectricityBillObject()
             var message = getString(R.string.register_sucess)
+            saveDocument() // só salvará caso tenha arquivo anexado
             if (isSave) {
-                pathUri?.let { uri ->
-                    val name = FileFacilitator.getFileNameByUri(uri)
-                    FileFacilitator.saveDocumentInDirectory(uri, name!!)
-                }
                 saveCount(electricityBill!!)
                 if (TxtLayout_read_last.visibility == View.VISIBLE) {
                     saveDecember()
                 }
             } else {
-
                 updateCount(electricityBill!!)
                 message = getString(R.string.update_sucess)
             }
@@ -147,6 +148,17 @@ class RegisterCountPowerFragment : Fragment() {
 
         TxtLayout_date_end.setEndIconOnClickListener {
             openDatePickerDialog(textInput_date_end)
+        }
+    }
+
+
+    private fun saveDocument() {
+        pathUri?.let { uri ->
+            if (!isSave){
+                val path = FileFacilitator.directoryDefault!!.path + "/${lastNameFile}"
+                FileFacilitator.deleteFile(path)
+            }
+            FileFacilitator.saveDocumentInDirectory(uri)
         }
     }
 
@@ -172,7 +184,7 @@ class RegisterCountPowerFragment : Fragment() {
 
         electricityBill = RegisterCountPowerFragmentArgs.fromBundle(it).electricityBillArgs
         electricityBill?.let {
-            lastPath = electricityBill!!.pathDocument
+            lastNameFile = FileFacilitator.getNameFileByPath(electricityBill!!.pathDocument)
             isSave = false
             buttonSaveOrUpdate.text = getString(R.string.update)
             loadDataToUpdate()
@@ -201,11 +213,17 @@ class RegisterCountPowerFragment : Fragment() {
     }
 
     private fun getPathDocument(): String? {
-        return FileFacilitator.directoryDefault?.path + "/" + pathUri?.let {
-            FileFacilitator.getFileNameByUri(
-                it
-            )
+        return if (isSave || pathUri != null) {
+            val fileName = "account" + SimpleDateFormat(
+                "ddMMyyyy_HHmmss",
+                Locale("pr", "BR")
+            ).format(Date()) + ".pdf"
+            FileFacilitator.directoryDefault?.path + "/" + fileName
+
+        } else {
+            electricityBill!!.pathDocument
         }
+
     }
 
     private fun hasValueLastYear(date: DateArgsDto): Boolean {
@@ -250,7 +268,8 @@ class RegisterCountPowerFragment : Fragment() {
             textInput_amount.setText(MoneyTextWatcher.formatterToReal(electricityBill!!.amount))
             textInput_date_init.setText(electricityBill!!.initDate)
             textInput_date_end.setText(electricityBill!!.endDate)
-            textView_selected_document.text = electricityBill!!.pathDocument
+            textView_selected_document.text =
+                FileFacilitator.getNameFileByPath(electricityBill!!.pathDocument)
         }
 
     }
