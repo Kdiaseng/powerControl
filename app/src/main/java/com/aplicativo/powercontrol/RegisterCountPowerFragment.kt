@@ -9,12 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.aplicativo.powercontrol.database.AppDataBase
 import com.aplicativo.powercontrol.domain.ElectricityBill
 import com.aplicativo.powercontrol.dto.DateArgsDto
 import com.aplicativo.powercontrol.utils.FileFacilitator
+import com.aplicativo.powercontrol.utils.MoneyTextWatcher
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.fragment_register_count_power.*
@@ -55,7 +57,7 @@ class RegisterCountPowerFragment : Fragment() {
         }
     }
 
-    fun openBrowser(url: String){
+    private fun openBrowser(url: String){
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(intent)
     }
@@ -83,6 +85,9 @@ class RegisterCountPowerFragment : Fragment() {
             openBrowser(URL_AMAZONAS_ENERGIA)
         }
 
+        val mLocale = Locale("pt", "BR")
+        textInput_amount.addTextChangedListener(MoneyTextWatcher(textInput_amount, mLocale))
+        textInput_street_lighting.addTextChangedListener(MoneyTextWatcher(textInput_street_lighting, mLocale))
 
         buttonSaveOrUpdate.setOnClickListener { it ->
             if (TxtLayout_read_last.visibility == View.VISIBLE
@@ -97,7 +102,8 @@ class RegisterCountPowerFragment : Fragment() {
                     textInput_street_lighting,
                     textInput_rate,
                     textInput_date_init,
-                    textInput_date_end
+                    textInput_date_end,
+                    textInput_amount
                 )
             ) return@setOnClickListener
 

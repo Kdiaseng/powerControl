@@ -18,27 +18,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--    <androidx.cardview.widget.CardView-->
-    <!--        app:cardBackgroundColor="@color/colorGreenAccent"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        app:cardCornerRadius="4dp"-->
-    <!--        app:cardElevation="10dp"-->
-    <!--        app:contentPadding="10dp"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent">-->
-
-    <!--        <TextView-->
-    <!--            android:textColor="@color/colorBlackLight"-->
-    <!--            android:id="@+id/textView_month"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:fontFamily="@font/archivo_black"-->
-    <!--            android:maxLength="3"-->
-    <!--            android:text="@string/mes"-->
-    <!--            android:textSize="14sp" />-->
-
-
-    <!--    </androidx.cardview.widget.CardView>-->
-
 </androidx.constraintlayout.widget.ConstraintLayout>

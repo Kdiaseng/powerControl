@@ -58,7 +58,7 @@ class DocumentListFragment : Fragment(), DocumentAdapter.OnDocumentListener {
 
     private fun loadListDocuments(documents: ArrayList<ElectricityBillDto>) {
         recyclerView_docs.adapter = DocumentAdapter(documents, this)
-        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        val layoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
         recyclerView_docs.layoutManager = layoutManager
     }
 
@@ -72,7 +72,6 @@ class DocumentListFragment : Fragment(), DocumentAdapter.OnDocumentListener {
         val list =
             AppDataBase(requireActivity()).electricityBillDao().getElectricityBillDtoAll(yearSelected)
         return ArrayList(list)
-
     }
 
 }

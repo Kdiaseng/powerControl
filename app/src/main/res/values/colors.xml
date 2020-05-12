@@ -11,8 +11,12 @@
     <color name="colorBlackToGray">#282d32</color>#92a3b2
     <color name="colorGrayLight">#92a3b2</color>
     <color name="colorOrange">#f79413</color>
-    <color name="colorGreenDark">#3c8d2f</color>
+    <color name="colorGreenDark">#388E3C</color>
     <color name="colorGreenDark1">#183A13</color>
+    <color name="colorGreen">#00e676</color>
+
+
+
 
     <!-- palette color dark to blue   -->
     <color name="paletteBlack">#212121</color>

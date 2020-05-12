@@ -18,13 +18,13 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <AutoCompleteTextView
-            android:textColor="@color/palette1Black"
-            android:enabled="false"
             android:id="@+id/autoComplete_year"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:hint="@string/year"
-            android:inputType="none" />
+            android:inputType="none"
+            android:textColor="@color/palette1Black" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -36,7 +36,7 @@
         android:background="@drawable/layoutgradient"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/textView_docs"
@@ -47,7 +47,7 @@
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/alfa_slab_one"
         android:text="@string/choose"
-        android:textSize="16sp"
+        android:textSize="22sp"
         app:layout_constraintEnd_toStartOf="@+id/outlinedTextField"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -55,9 +55,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="460dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="28dp"
         android:layout_marginTop="40dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="28dp"
         app:cardBackgroundColor="@color/palette1BlackLight"
         app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -66,16 +66,19 @@
         app:strokeColor="@color/colorGreenAccent"
         app:strokeWidth="1dp">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView_docs"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 tools:listitem="@layout/item_document" />
 
-
-
-
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
 

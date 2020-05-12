@@ -31,6 +31,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.card_data.view.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import java.io.File
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -84,7 +85,6 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
             }
         }
     }
-
 
     private fun showMessageSneakBar(message: String) {
         Snackbar.make(bottom_app_bar, message, Snackbar.LENGTH_SHORT)
@@ -170,7 +170,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
     private fun showDataInScreen(monthNumber: Int, year: Int) {
         electricityBill = AppDataBase(requireActivity()).electricityBillDao()
             .getElectricityBillAllByMonthNumber(monthNumber, year)
-
+        val mLocale = Locale("pt", "BR")
         if (electricityBill != null) {
 
             electricityBill?.apply {
@@ -182,11 +182,13 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
                     getString(R.string.kilowatt_hour, billedConsumption)
                 card_data_energy.textView_card_rate.text = rate.toString()
                 card_data_energy.textView_card_street_lighting.text =
-                    getString(R.string.real, streetLighting)
+                    NumberFormat.getCurrencyInstance(mLocale).format(streetLighting).toString()
                 textView_consumption_period_value.text = initDate
                 textView_consumption_period_value_end.text = endDate
             }
-            texView_amount.text = electricityBill!!.amount.toString()
+
+            texView_amount.text = NumberFormat.getCurrencyInstance(mLocale).format(electricityBill!!.amount).toString()
+
             if (!validateCalculateAmount(electricityBill!!))
                 imageView_icon_validation.setImageResource(R.drawable.erroicon)
             else
@@ -207,7 +209,6 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         val total = consumption * rate + streetLighting
         return total == amountInput
     }
-
 
     private fun getLastRead(): Int {
         var numberMonth = (mesDto!!.number - 1)
@@ -257,7 +258,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
             axisLeft.textColor = Color.WHITE
             axisRight.textColor = Color.WHITE
             xAxis.textColor = Color.WHITE
-            animateX(5000)
+            animateX(3000)
         }
     }
 
@@ -281,9 +282,8 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
             axisRight.textColor = Color.WHITE
             axisLeft.textColor = Color.WHITE
             xAxis.textColor = Color.WHITE
-            animateY(5000)
+            animateY(3000)
         }
-
     }
 
     private fun loadLists(default: Int = DECEMBER) {
@@ -295,7 +295,6 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
         if (listValues.isNotEmpty()) listValues.clear()
         listValues.addAll(list)
     }
-
 
     private fun loadListBarEntry(
         listValues: List<ElectricityBillDto>,
