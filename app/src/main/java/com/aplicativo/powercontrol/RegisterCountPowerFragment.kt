@@ -35,6 +35,8 @@ class RegisterCountPowerFragment : Fragment() {
     private val REQUEST_CODE: Int = 2
     private val URL_AMAZONAS_ENERGIA = "https://www.amazonasenergia.com/agenciavirtual/via-pagamento"
 
+    private var lastPath = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -63,7 +65,7 @@ class RegisterCountPowerFragment : Fragment() {
     }
 
     private fun hasDocument(): Boolean {
-        return pathUri != null
+        return pathUri != null || electricityBill?.pathDocument != null
     }
 
 
@@ -125,6 +127,7 @@ class RegisterCountPowerFragment : Fragment() {
                     saveDecember()
                 }
             } else {
+
                 updateCount(electricityBill!!)
                 message = getString(R.string.update_sucess)
             }
@@ -169,6 +172,7 @@ class RegisterCountPowerFragment : Fragment() {
 
         electricityBill = RegisterCountPowerFragmentArgs.fromBundle(it).electricityBillArgs
         electricityBill?.let {
+            lastPath = electricityBill!!.pathDocument
             isSave = false
             buttonSaveOrUpdate.text = getString(R.string.update)
             loadDataToUpdate()
@@ -241,11 +245,12 @@ class RegisterCountPowerFragment : Fragment() {
             textInput_read_current.setText(electricityBill!!.currentReading.toString())
             textInput_measured_consumption.setText(electricityBill!!.measuredConsumption.toString())
             textInput_billed_consumption.setText(electricityBill!!.billedConsumption.toString())
-            textInput_street_lighting.setText(electricityBill!!.streetLighting.toString())
+            textInput_street_lighting.setText(MoneyTextWatcher.formatterToReal(electricityBill!!.streetLighting))
             textInput_rate.setText(electricityBill!!.rate.toString())
-            textInput_amount.setText(electricityBill!!.amount.toString())
+            textInput_amount.setText(MoneyTextWatcher.formatterToReal(electricityBill!!.amount))
             textInput_date_init.setText(electricityBill!!.initDate)
             textInput_date_end.setText(electricityBill!!.endDate)
+            textView_selected_document.text = electricityBill!!.pathDocument
         }
 
     }
@@ -258,9 +263,9 @@ class RegisterCountPowerFragment : Fragment() {
             textInput_read_current.text.toString().toInt(),
             textInput_measured_consumption.text.toString().toInt(),
             textInput_billed_consumption.text.toString().toInt(),
-            textInput_street_lighting.text.toString().toDouble(),
+            MoneyTextWatcher.transformToValue(textInput_street_lighting.text.toString()).toDouble(),
             textInput_rate.text.toString().toDouble(),
-            textInput_amount.text.toString().toDouble(),
+            MoneyTextWatcher.transformToValue(textInput_amount.text.toString()).toDouble(),
             textInput_date_init.text.toString(),
             textInput_date_end.text.toString(),
             pathDocument!!

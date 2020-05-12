@@ -57,4 +57,18 @@ public class MoneyTextWatcher implements TextWatcher {
                 2, BigDecimal.ROUND_FLOOR).divide(new BigDecimal(100), BigDecimal.ROUND_FLOOR
         );
     }
+
+
+    public static String transformToValue(String value) {
+        String formatted = value;
+        formatted = formatted.replaceAll("[^(0-9)(.,)]", "");
+        formatted = formatted.replaceAll("[(.)]", "");
+        formatted = formatted.replace(",", ".");
+        return formatted;
+    }
+
+    public  static String formatterToReal(Double value){
+        Locale mLocale =  new Locale("pt", "BR");
+        return NumberFormat.getCurrencyInstance(mLocale).format(value);
+    }
 }

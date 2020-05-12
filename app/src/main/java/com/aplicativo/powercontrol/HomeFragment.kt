@@ -23,6 +23,7 @@ import com.aplicativo.powercontrol.dto.ElectricityBillDto
 import com.aplicativo.powercontrol.dto.MesDto
 import com.aplicativo.powercontrol.utils.DateFacilitator
 import com.aplicativo.powercontrol.utils.FileFacilitator
+import com.aplicativo.powercontrol.utils.MoneyTextWatcher
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.*
@@ -170,7 +171,6 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
     private fun showDataInScreen(monthNumber: Int, year: Int) {
         electricityBill = AppDataBase(requireActivity()).electricityBillDao()
             .getElectricityBillAllByMonthNumber(monthNumber, year)
-        val mLocale = Locale("pt", "BR")
         if (electricityBill != null) {
 
             electricityBill?.apply {
@@ -182,13 +182,12 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
                     getString(R.string.kilowatt_hour, billedConsumption)
                 card_data_energy.textView_card_rate.text = rate.toString()
                 card_data_energy.textView_card_street_lighting.text =
-                    NumberFormat.getCurrencyInstance(mLocale).format(streetLighting).toString()
+                   MoneyTextWatcher.formatterToReal(streetLighting)
                 textView_consumption_period_value.text = initDate
                 textView_consumption_period_value_end.text = endDate
             }
 
-            texView_amount.text = NumberFormat.getCurrencyInstance(mLocale).format(electricityBill!!.amount).toString()
-
+            texView_amount.text = MoneyTextWatcher.formatterToReal(electricityBill!!.amount)
             if (!validateCalculateAmount(electricityBill!!))
                 imageView_icon_validation.setImageResource(R.drawable.erroicon)
             else
