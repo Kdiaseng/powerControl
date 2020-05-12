@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.content.FileProvider
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -94,6 +95,7 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         FileFacilitator.init(requireContext())
         mesDto = getMesDtoCurrent()
         yearSelect = getCurrentYear()
@@ -149,6 +151,12 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
             Navigation.findNavController(it).navigate(action)
         }
 
+    }
+
+    private fun setVisibleMenu(id: Int, enable: Boolean){
+        val menu  = bottom_app_bar.menu
+        val menuItem = menu.findItem(id)
+        menuItem.isVisible =  enable
     }
 
     private fun loadYears() {
@@ -292,6 +300,8 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
             AppDataBase(requireActivity()).electricityBillDao().getElectricityBillDtoAll(yearSelect)
                 .toTypedArray()
         if (listValues.isNotEmpty()) listValues.clear()
+        val enableMenu = list.isNotEmpty()
+        setVisibleMenu(R.id.app_bar_list_doc, enableMenu)
         listValues.addAll(list)
     }
 
@@ -334,9 +344,11 @@ class HomeFragment : Fragment(), MonthAdapter.OnMonthListener {
 
     private fun setIconFloatingButton() {
         if (!isSave()) {
+            setVisibleMenu(R.id.app_bar_view_doc, true)
             floatingActionButtonAddOrUpdate.setImageResource(android.R.drawable.ic_menu_edit)
         } else {
             floatingActionButtonAddOrUpdate.setImageResource(android.R.drawable.ic_input_add)
+            setVisibleMenu(R.id.app_bar_view_doc, false)
         }
     }
 
