@@ -4,4 +4,4 @@ os valores mensais pagos além de deixar acessível os documentos de boletos.
 
 ## Telas 
 
-![Alt text](/powerControl/app/src/main/res/drawable-v24/conpdf.png?raw=true "Optional Title")
+<img src="https://user-images.githubusercontent.com/41275838/81860127-4b286d00-9534-11ea-9ef8-0e30c4cb0e58.png?w=512" height="310" width="180">
